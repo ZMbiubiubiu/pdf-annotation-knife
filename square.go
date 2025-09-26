@@ -2,9 +2,14 @@
 package annotation
 
 type SquareAnnotation struct {
+	BaseAnnotation
 }
 
-func NewSquareAnnotation(rect Rect) *SquareAnnotation {
+func NewSquareAnnotation() *SquareAnnotation {
 	
 	return &SquareAnnotation{}
+}
+
+func (s *SquareAnnotation) GenerateAppearance() error {
+	return nil
 }

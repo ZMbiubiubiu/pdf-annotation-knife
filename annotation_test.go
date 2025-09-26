@@ -1,6 +1,7 @@
 package annotation
 
 import (
+	"image/color"
 	"log"
 	"testing"
 	"time"
@@ -25,5 +26,16 @@ func init() {
 }
 
 func TestAddAnnotation(t *testing.T) {
-	// instance.FPDFPage_CreateAnnot()
+	// new square
+
+	var squareAnnot = NewSquareAnnotation()
+	squareAnnot.Rect = Rect{
+		Left:   100,
+		Top:    100,
+		Right:  200,
+		Bottom: 200,
+	}
+	squareAnnot.Width = 2
+	squareAnnot.StrikeColor = &color.RGBA{255, 0, 0, 255}
+	squareAnnot.FillColor = &color.RGBA{0, 255, 0, 255}
 }
