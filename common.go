@@ -3,6 +3,7 @@ package annotation
 import (
 	"context"
 	"image/color"
+	"log"
 
 	"github.com/klippa-app/go-pdfium"
 	"github.com/klippa-app/go-pdfium/enums"
@@ -19,6 +20,7 @@ type Rect struct {
 }
 
 type BaseAnnotation struct {
+	Page requests.Page
 	Annotation  references.FPDF_ANNOTATION
 	Subtype     enums.FPDF_ANNOTATION_SUBTYPE
 	Rect        Rect
@@ -28,14 +30,15 @@ type BaseAnnotation struct {
 	AP          string
 }
 
-func (b *BaseAnnotation) CreateAnnotation(ctx context.Context, instance pdfium.Pdfium, page requests.Page) error {
+func (b *BaseAnnotation) AddAnnotationToPage(ctx context.Context, instance pdfium.Pdfium) error {
 
 	// create annot
 	annotRes, err := instance.FPDFPage_CreateAnnot(&requests.FPDFPage_CreateAnnot{
-		Page:    page,
+		Page:    b.Page,
 		Subtype: b.Subtype,
 	})
 	if err != nil {
+		log.Fatalf("create annot failed: %v", err)
 		return err
 	}
 	b.Annotation = annotRes.Annotation
@@ -51,6 +54,7 @@ func (b *BaseAnnotation) CreateAnnotation(ctx context.Context, instance pdfium.P
 		},
 	})
 	if err != nil {
+		log.Fatalf("set annot rect failed: %v", err)
 		return err
 	}
 
@@ -62,6 +66,7 @@ func (b *BaseAnnotation) CreateAnnotation(ctx context.Context, instance pdfium.P
 		BorderWidth:      float32(b.Width),
 	})
 	if err != nil {
+		log.Fatalf("set annot border failed: %v", err)
 		return err
 	}
 
@@ -76,6 +81,7 @@ func (b *BaseAnnotation) CreateAnnotation(ctx context.Context, instance pdfium.P
 			A:          uint(b.StrikeColor.A),
 		})
 		if err != nil {
+			log.Fatalf("set annot strike color failed: %v", err)
 			return err
 		}
 	}
@@ -91,6 +97,7 @@ func (b *BaseAnnotation) CreateAnnotation(ctx context.Context, instance pdfium.P
 			A:          uint(b.FillColor.A),
 		})
 		if err != nil {
+			log.Fatalf("set annot fill color failed: %v", err)
 			return err
 		}
 	}
@@ -103,6 +110,7 @@ func (b *BaseAnnotation) CreateAnnotation(ctx context.Context, instance pdfium.P
 			Value:          &b.AP,
 		})
 		if err != nil {
+			log.Fatalf("set annot ap failed: %v", err)
 			return err
 		}
 	}
