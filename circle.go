@@ -18,6 +18,7 @@ func NewCircleAnnotation(page requests.Page) *CircleAnnotation {
 		BaseAnnotation: BaseAnnotation{
 			Page: page,
 			Subtype: enums.FPDF_ANNOT_SUBTYPE_CIRCLE,
+			NM:      GenerateUUID(),
 		},
 	}
 }

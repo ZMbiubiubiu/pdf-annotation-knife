@@ -98,20 +98,32 @@ func TestAddInkAnnotation(t *testing.T) {
 				Y: 100,
 			},
 			{
-				X: 200,
-				Y: 200,
+				X: 105,
+				Y: 105,
+			},
+			{
+				X: 110,
+				Y: 100,
+			},
+			{
+				X: 115,
+				Y: 95,
+			},
+			{
+				X: 120,
+				Y: 100,
 			},
 		},
 	}
 	inkAnnot.Rect = Rect{
-		Left:   100,
+		Left:   0,
+		Bottom: 0,
 		Top:    200,
 		Right:  200,
-		Bottom: 100,
 	}
-	inkAnnot.Width = 2
-	inkAnnot.StrikeColor = &color.RGBA{255, 0, 0, 255}
-	inkAnnot.FillColor = &color.RGBA{0, 255, 0, 255}
+	inkAnnot.Width = 4
+	inkAnnot.StrikeColor = &color.RGBA{255, 0, 255, 120}
+	// inkAnnot.FillColor = &color.RGBA{0, 255, 0, 255}
 	inkAnnot.GenerateAppearance()
 	err = inkAnnot.AddAnnotationToPage(context.Background(), instance)
 	if err != nil {
@@ -236,23 +248,33 @@ func TestAddHighlightAnnotation(t *testing.T) {
 	var highlightAnnot = NewHighlightAnnotation(page)
 	highlightAnnot.Rect = Rect{
 		Left:   100,
-		Top:    200,
+		Top:    400,
 		Right:  200,
 		Bottom: 100,
 	}
 	highlightAnnot.Width = 2
-	highlightAnnot.StrikeColor = &color.RGBA{255, 0, 0, 255}
-	highlightAnnot.FillColor = &color.RGBA{0, 255, 0, 255}
+	highlightAnnot.StrikeColor = &color.RGBA{255, 0, 0, 120}
+	// highlightAnnot.FillColor = &color.RGBA{0, 255, 0, 255}
 	highlightAnnot.QuadPoints = []QuadPoint{
 		{
-			LeftTopX: 100,
-			LeftTopY: 200,
-			RightTopX: 200,
-			RightTopY: 200,
+			LeftTopX:     100,
+			LeftTopY:     200,
+			RightTopX:    200,
+			RightTopY:    200,
 			RightBottomX: 200,
 			RightBottomY: 100,
-			LeftBottomX: 100,
-			LeftBottomY: 100,
+			LeftBottomX:  100,
+			LeftBottomY:  100,
+		},
+		{
+			LeftTopX:     100,
+			LeftTopY:     400,
+			RightTopX:    200,
+			RightTopY:    400,
+			RightBottomX: 200,
+			RightBottomY: 300,
+			LeftBottomX:  100,
+			LeftBottomY:  300,
 		},
 	}
 	highlightAnnot.GenerateAppearance()
@@ -300,14 +322,14 @@ func TestAddUnderlineAnnotation(t *testing.T) {
 	underlineAnnot.FillColor = &color.RGBA{0, 255, 0, 255}
 	underlineAnnot.QuadPoints = []QuadPoint{
 		{
-			LeftTopX: 100,
-			LeftTopY: 200,
-			RightTopX: 200,
-			RightTopY: 200,
+			LeftTopX:     100,
+			LeftTopY:     200,
+			RightTopX:    200,
+			RightTopY:    200,
 			RightBottomX: 200,
 			RightBottomY: 100,
-			LeftBottomX: 100,
-			LeftBottomY: 100,
+			LeftBottomX:  100,
+			LeftBottomY:  100,
 		},
 	}
 	underlineAnnot.GenerateAppearance()
@@ -355,14 +377,14 @@ func TestAddStrikeoutAnnotation(t *testing.T) {
 	strikeoutAnnot.FillColor = &color.RGBA{0, 255, 0, 255}
 	strikeoutAnnot.QuadPoints = []QuadPoint{
 		{
-			LeftTopX: 100,
-			LeftTopY: 200,
-			RightTopX: 200,
-			RightTopY: 200,
+			LeftTopX:     100,
+			LeftTopY:     200,
+			RightTopX:    200,
+			RightTopY:    200,
 			RightBottomX: 200,
 			RightBottomY: 100,
-			LeftBottomX: 100,
-			LeftBottomY: 100,
+			LeftBottomX:  100,
+			LeftBottomY:  100,
 		},
 	}
 	strikeoutAnnot.GenerateAppearance()

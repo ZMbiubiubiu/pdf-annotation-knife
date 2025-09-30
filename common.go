@@ -59,6 +59,7 @@ func convertQuadPointToPdfiumFormat(quadPoints []QuadPoint) []structs.FPDF_FS_QU
 }
 
 type BaseAnnotation struct {
+	NM          string
 	Page        requests.Page
 	Annotation  references.FPDF_ANNOTATION
 	Subtype     enums.FPDF_ANNOTATION_SUBTYPE
@@ -141,8 +142,21 @@ func (b *BaseAnnotation) AddAnnotationToPage(ctx context.Context, instance pdfiu
 		}
 	}
 
+	// set nm
+	_, err = instance.FPDFAnnot_SetStringValue(&requests.FPDFAnnot_SetStringValue{
+		Annotation: b.Annotation,
+		Key:        "NM",
+		Value:      b.NM,
+	})
+	if err != nil {
+		log.Fatalf("set annot nm failed: %v", err)
+		return err
+	}
+
 	// set ap
 	if b.AP != "" {
+		log.Printf("subtype:%d annot ap: %s\n", b.Subtype, b.AP)
+
 		_, err = instance.FPDFAnnot_SetAP(&requests.FPDFAnnot_SetAP{
 			Annotation:     b.Annotation,
 			AppearanceMode: enums.FPDF_ANNOT_APPEARANCEMODE_NORMAL,

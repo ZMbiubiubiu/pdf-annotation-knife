@@ -33,3 +33,5 @@ go.work.sum
 
 # pdf file
 *.pdf
+
+.DS_Store

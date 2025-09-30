@@ -19,6 +19,7 @@ func NewStrikeoutAnnotation(page requests.Page) *StrikeoutAnnotation {
 		BaseAnnotation: BaseAnnotation{
 			Page:    page,
 			Subtype: enums.FPDF_ANNOT_SUBTYPE_STRIKEOUT,
+			NM:      GenerateUUID(),
 		},
 	}
 }

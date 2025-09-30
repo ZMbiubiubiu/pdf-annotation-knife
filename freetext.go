@@ -28,6 +28,7 @@ func NewFreeTextAnnotation(page requests.Page) *FreeTextAnnotation {
 		BaseAnnotation: BaseAnnotation{
 			Page:    page,
 			Subtype: enums.FPDF_ANNOT_SUBTYPE_FREETEXT,
+			NM:      GenerateUUID(),
 		},
 	}
 }

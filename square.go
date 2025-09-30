@@ -18,6 +18,7 @@ func NewSquareAnnotation(page requests.Page) *SquareAnnotation {
 		BaseAnnotation: BaseAnnotation{
 			Page: page,
 			Subtype: enums.FPDF_ANNOT_SUBTYPE_SQUARE,
+			NM:      GenerateUUID(),
 		},
 	}
 }

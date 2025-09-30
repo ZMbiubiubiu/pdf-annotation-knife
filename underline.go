@@ -19,6 +19,7 @@ func NewUnderlineAnnotation(page requests.Page) *UnderlineAnnotation {
 		BaseAnnotation: BaseAnnotation{
 			Page:    page,
 			Subtype: enums.FPDF_ANNOT_SUBTYPE_UNDERLINE,
+			NM:      GenerateUUID(),
 		},
 	}
 }
