@@ -19,8 +19,47 @@ type Rect struct {
 	Left, Bottom, Right, Top float32
 }
 
+type Point struct {
+	X, Y float32
+}
+
+func convertPointToPdfiumFormat(points []Point) []structs.FPDF_FS_POINTF {
+	pdfiumPoints := make([]structs.FPDF_FS_POINTF, 0, len(points))
+	for _, point := range points {
+		pdfiumPoints = append(pdfiumPoints, structs.FPDF_FS_POINTF{
+			X: point.X,
+			Y: point.Y,
+		})
+	}
+	return pdfiumPoints
+}
+
+type QuadPoint struct {
+	LeftTopX, LeftTopY         float32
+	RightTopX, RightTopY       float32
+	RightBottomX, RightBottomY float32
+	LeftBottomX, LeftBottomY   float32
+}
+
+func convertQuadPointToPdfiumFormat(quadPoints []QuadPoint) []structs.FPDF_FS_QUADPOINTSF {
+	pdfiumQuadPoints := make([]structs.FPDF_FS_QUADPOINTSF, 0, len(quadPoints))
+	for _, quadPoint := range quadPoints {
+		pdfiumQuadPoints = append(pdfiumQuadPoints, structs.FPDF_FS_QUADPOINTSF{
+			X1: quadPoint.LeftTopX,
+			Y1: quadPoint.LeftTopY,
+			X2: quadPoint.RightTopX,
+			Y2: quadPoint.RightTopY,
+			X3: quadPoint.LeftBottomX,
+			Y3: quadPoint.LeftBottomY,
+			X4: quadPoint.RightBottomX,
+			Y4: quadPoint.RightBottomY,
+		})
+	}
+	return pdfiumQuadPoints
+}
+
 type BaseAnnotation struct {
-	Page requests.Page
+	Page        requests.Page
 	Annotation  references.FPDF_ANNOTATION
 	Subtype     enums.FPDF_ANNOTATION_SUBTYPE
 	Rect        Rect

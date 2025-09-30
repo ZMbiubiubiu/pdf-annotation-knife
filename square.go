@@ -5,6 +5,7 @@ import (
 	"context"
 
 	"github.com/klippa-app/go-pdfium"
+	"github.com/klippa-app/go-pdfium/enums"
 	"github.com/klippa-app/go-pdfium/requests"
 )
 
@@ -16,6 +17,7 @@ func NewSquareAnnotation(page requests.Page) *SquareAnnotation {
 	return &SquareAnnotation{
 		BaseAnnotation: BaseAnnotation{
 			Page: page,
+			Subtype: enums.FPDF_ANNOT_SUBTYPE_SQUARE,
 		},
 	}
 }
