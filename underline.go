@@ -16,10 +16,9 @@ type UnderlineAnnotation struct {
 	QuadPoints []QuadPoint
 }
 
-func NewUnderlineAnnotation(page requests.Page) *UnderlineAnnotation {
+func NewUnderlineAnnotation() *UnderlineAnnotation {
 	return &UnderlineAnnotation{
 		BaseAnnotation: BaseAnnotation{
-			Page:    page,
 			Subtype: enums.FPDF_ANNOT_SUBTYPE_UNDERLINE,
 			NM:      GenerateUUID(),
 		},
@@ -28,7 +27,7 @@ func NewUnderlineAnnotation(page requests.Page) *UnderlineAnnotation {
 
 func (u *UnderlineAnnotation) GenerateAppearance() error {
 	// generate underline appearance
-	u.AP = strings.Join([]string{
+	u.ap = strings.Join([]string{
 		// "[] 0 d 0.571 w",
 		"1 w",
 		u.GetColorAP(),
@@ -48,9 +47,9 @@ func (u *UnderlineAnnotation) pointsCallback() string {
 	return ap
 }
 
-func (u *UnderlineAnnotation) AddAnnotationToPage(ctx context.Context, instance pdfium.Pdfium) error {
+func (u *UnderlineAnnotation) AddAnnotationToPage(ctx context.Context, instance pdfium.Pdfium, page requests.Page) error {
 	// create annotation
-	err := u.BaseAnnotation.AddAnnotationToPage(ctx, instance)
+	err := u.BaseAnnotation.AddAnnotationToPage(ctx, instance, page)
 	if err != nil {
 		return err
 	}

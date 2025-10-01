@@ -23,10 +23,9 @@ type FreeTextAnnotation struct {
 	FontSize  int
 }
 
-func NewFreeTextAnnotation(page requests.Page) *FreeTextAnnotation {
+func NewFreeTextAnnotation() *FreeTextAnnotation {
 	return &FreeTextAnnotation{
 		BaseAnnotation: BaseAnnotation{
-			Page:    page,
 			Subtype: enums.FPDF_ANNOT_SUBTYPE_FREETEXT,
 			NM:      GenerateUUID(),
 		},
@@ -35,11 +34,11 @@ func NewFreeTextAnnotation(page requests.Page) *FreeTextAnnotation {
 
 func (f *FreeTextAnnotation) GenerateAppearance() error {
 	// todo generate freetext appearance
-	f.AP = ""
+	f.ap = ""
 	return nil
 }
 
-func (f *FreeTextAnnotation) AddAnnotationToPage(ctx context.Context, instance pdfium.Pdfium) error {
+func (f *FreeTextAnnotation) AddAnnotationToPage(ctx context.Context, instance pdfium.Pdfium, page requests.Page) error {
 	// set default font size and color
 	if f.FontSize == 0 {
 		f.FontSize = DefaultFontSize
@@ -49,7 +48,7 @@ func (f *FreeTextAnnotation) AddAnnotationToPage(ctx context.Context, instance p
 	}
 
 	// create annotation
-	err := f.BaseAnnotation.AddAnnotationToPage(ctx, instance)
+	err := f.BaseAnnotation.AddAnnotationToPage(ctx, instance, page)
 	if err != nil {
 		return err
 	}

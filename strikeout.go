@@ -16,10 +16,9 @@ type StrikeoutAnnotation struct {
 	QuadPoints []QuadPoint
 }
 
-func NewStrikeoutAnnotation(page requests.Page) *StrikeoutAnnotation {
+func NewStrikeoutAnnotation() *StrikeoutAnnotation {
 	return &StrikeoutAnnotation{
 		BaseAnnotation: BaseAnnotation{
-			Page:    page,
 			Subtype: enums.FPDF_ANNOT_SUBTYPE_STRIKEOUT,
 			NM:      GenerateUUID(),
 		},
@@ -28,7 +27,7 @@ func NewStrikeoutAnnotation(page requests.Page) *StrikeoutAnnotation {
 
 func (s *StrikeoutAnnotation) GenerateAppearance() error {
 	// todo generate strikeout appearance
-	s.AP = strings.Join([]string{
+	s.ap = strings.Join([]string{
 		"[] 0 d 1 w",
 		s.GetColorAP(),
 		s.GetPDFOpacityAP(),
@@ -38,18 +37,18 @@ func (s *StrikeoutAnnotation) GenerateAppearance() error {
 }
 
 func (s *StrikeoutAnnotation) pointsCallback() string {
-	var ap string
+	var pointsAp string
 	for i := 0; i < len(s.QuadPoints); i++ {
-		ap += fmt.Sprintf("%.3f %.3f m ", (s.QuadPoints[i].LeftTopX+s.QuadPoints[i].LeftBottomX)/2, (s.QuadPoints[i].LeftTopY+s.QuadPoints[i].LeftBottomY)/2)
-		ap += fmt.Sprintf("%.3f %.3f l ", (s.QuadPoints[i].RightTopX+s.QuadPoints[i].RightBottomX)/2, (s.QuadPoints[i].RightTopY+s.QuadPoints[i].RightBottomY)/2)
-		ap += "S\n"
+		pointsAp += fmt.Sprintf("%.3f %.3f m ", (s.QuadPoints[i].LeftTopX+s.QuadPoints[i].LeftBottomX)/2, (s.QuadPoints[i].LeftTopY+s.QuadPoints[i].LeftBottomY)/2)
+		pointsAp += fmt.Sprintf("%.3f %.3f l ", (s.QuadPoints[i].RightTopX+s.QuadPoints[i].RightBottomX)/2, (s.QuadPoints[i].RightTopY+s.QuadPoints[i].RightBottomY)/2)
+		pointsAp += "S\n"
 	}
-	return ap
+	return pointsAp
 }
 
-func (s *StrikeoutAnnotation) AddAnnotationToPage(ctx context.Context, instance pdfium.Pdfium) error {
+func (s *StrikeoutAnnotation) AddAnnotationToPage(ctx context.Context, instance pdfium.Pdfium, page requests.Page) error {
 	// create annotation
-	err := s.BaseAnnotation.AddAnnotationToPage(ctx, instance)
+	err := s.BaseAnnotation.AddAnnotationToPage(ctx, instance, page)
 	if err != nil {
 		return err
 	}

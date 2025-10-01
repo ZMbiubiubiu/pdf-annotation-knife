@@ -33,8 +33,8 @@ func (b *BaseAnnotation) GetWidthAP() string {
 
 func (b *BaseAnnotation) GetColorAP() string {
 	return strings.Join([]string{
-		b.getColorAP(b.FillColor, true),
-		b.getColorAP(b.StrikeColor, false),
+		b.getColorAP(b.fillColor, true),
+		b.getColorAP(b.strikeColor, false),
 	}, "\n")
 }
 

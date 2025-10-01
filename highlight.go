@@ -21,10 +21,9 @@ type HighlightAnnotation struct {
 	QuadPoints []QuadPoint
 }
 
-func NewHighlightAnnotation(page requests.Page) *HighlightAnnotation {
+func NewHighlightAnnotation() *HighlightAnnotation {
 	return &HighlightAnnotation{
 		BaseAnnotation: BaseAnnotation{
-			Page:    page,
 			Subtype: enums.FPDF_ANNOT_SUBTYPE_HIGHLIGHT,
 			NM:      GenerateUUID(),
 		},
@@ -33,7 +32,7 @@ func NewHighlightAnnotation(page requests.Page) *HighlightAnnotation {
 
 func (h *HighlightAnnotation) GenerateAppearance() error {
 	// generate highlight appearance
-	h.AP = strings.Join([]string{
+	h.ap = strings.Join([]string{
 		h.GetColorAP(),
 		h.GetPDFOpacityAP(),
 		h.pointsCallback(h.QuadPoints),
@@ -55,12 +54,12 @@ func (h *HighlightAnnotation) pointsCallback(quadPoints []QuadPoint) string {
 	return pointsAP
 }
 
-func (h *HighlightAnnotation) AddAnnotationToPage(ctx context.Context, instance pdfium.Pdfium) error {
-	if h.StrikeColor == nil {
-		h.StrikeColor = &DefaultHighlightColor
+func (h *HighlightAnnotation) AddAnnotationToPage(ctx context.Context, instance pdfium.Pdfium, page requests.Page) error {
+	if h.strikeColor == nil {
+		h.strikeColor = &DefaultHighlightColor
 	}
 	// create annotation
-	err := h.BaseAnnotation.AddAnnotationToPage(ctx, instance)
+	err := h.BaseAnnotation.AddAnnotationToPage(ctx, instance, page)
 	if err != nil {
 		return err
 	}

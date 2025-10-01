@@ -4,6 +4,7 @@ package annotation
 import (
 	"context"
 	"fmt"
+	"image/color"
 	"math"
 	"strings"
 
@@ -23,19 +24,22 @@ type CircleAnnotation struct {
 	BaseAnnotation
 }
 
-func NewCircleAnnotation(page requests.Page) *CircleAnnotation {
+func NewCircleAnnotation() *CircleAnnotation {
 	return &CircleAnnotation{
 		BaseAnnotation: BaseAnnotation{
-			Page:    page,
 			Subtype: enums.FPDF_ANNOT_SUBTYPE_CIRCLE,
 			NM:      GenerateUUID(),
 		},
 	}
 }
 
+func (c *CircleAnnotation) SetFillColor(color color.RGBA) {
+	c.fillColor = &color
+}
+
 func (c *CircleAnnotation) GenerateAppearance() error {
 	// generate circle appearance
-	c.AP = strings.Join([]string{
+	c.ap = strings.Join([]string{
 		c.GetWidthAP(),
 		c.GetColorAP(),
 		c.GetPDFOpacityAP(),
@@ -47,10 +51,10 @@ func (c *CircleAnnotation) GenerateAppearance() error {
 
 func (c *CircleAnnotation) pointsCallback() string {
 	var ap string
-	x0 := c.Rect.Left + float32(c.Width)/2
-	y0 := c.Rect.Top - float32(c.Width)/2
-	x1 := c.Rect.Right - float32(c.Width)/2
-	y1 := c.Rect.Bottom + float32(c.Width)/2
+	x0 := c.rect.Left + float32(c.Width)/2
+	y0 := c.rect.Top - float32(c.Width)/2
+	x1 := c.rect.Right - float32(c.Width)/2
+	y1 := c.rect.Bottom + float32(c.Width)/2
 
 	xMid := x0 + (x1-x0)/2
 	yMid := y0 + (y1-y0)/2
@@ -64,19 +68,19 @@ func (c *CircleAnnotation) pointsCallback() string {
 		fmt.Sprintf("%.3f %.3f %.3f %.3f %.3f %.3f c", x0, yMid+yOffset, xMid-xOffset, y1, xMid, y1),
 		"h\n",
 	}, "\n")
-	if c.FillColor != nil {
+	if c.fillColor != nil {
 		ap += "B\n"
 	}
-	if c.StrikeColor != nil {
+	if c.strikeColor != nil {
 		ap += "S\n"
 	}
 
 	return ap
 }
 
-func (c *CircleAnnotation) AddAnnotationToPage(ctx context.Context, instance pdfium.Pdfium) error {
+func (c *CircleAnnotation) AddAnnotationToPage(ctx context.Context, instance pdfium.Pdfium, page requests.Page) error {
 	// create annotation
-	err := c.BaseAnnotation.AddAnnotationToPage(ctx, instance)
+	err := c.BaseAnnotation.AddAnnotationToPage(ctx, instance, page)
 	if err != nil {
 		return err
 	}

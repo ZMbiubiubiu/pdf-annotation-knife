@@ -17,10 +17,9 @@ type InkAnnotation struct {
 	StrikeLineJoin int
 }
 
-func NewInkAnnotation(page requests.Page) *InkAnnotation {
+func NewInkAnnotation() *InkAnnotation {
 	return &InkAnnotation{
 		BaseAnnotation: BaseAnnotation{
-			Page:    page,
 			Subtype: enums.FPDF_ANNOT_SUBTYPE_INK,
 			NM:      GenerateUUID(),
 		},
@@ -29,7 +28,7 @@ func NewInkAnnotation(page requests.Page) *InkAnnotation {
 
 func (i *InkAnnotation) GenerateAppearance() error {
 	// generate ink appearance
-	i.AP = strings.Join([]string{
+	i.ap = strings.Join([]string{
 		i.GetColorAP(),
 		i.GetWidthAP(),
 		i.GetPDFOpacityAP(),
@@ -60,8 +59,8 @@ func (i *InkAnnotation) GetLineStyleAP() string {
 	return fmt.Sprintf("%d j %d J", i.StrikeLineCap, i.StrikeLineJoin)
 }
 
-func (i *InkAnnotation) AddAnnotationToPage(ctx context.Context, instance pdfium.Pdfium) error {
-	err := i.BaseAnnotation.AddAnnotationToPage(ctx, instance)
+func (i *InkAnnotation) AddAnnotationToPage(ctx context.Context, instance pdfium.Pdfium, page requests.Page) error {
+	err := i.BaseAnnotation.AddAnnotationToPage(ctx, instance, page)
 	if err != nil {
 		return err
 	}
