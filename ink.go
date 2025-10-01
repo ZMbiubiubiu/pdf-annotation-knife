@@ -28,7 +28,7 @@ func NewInkAnnotation(page requests.Page) *InkAnnotation {
 }
 
 func (i *InkAnnotation) GenerateAppearance() error {
-	// todo generate ink appearance
+	// generate ink appearance
 	i.AP = strings.Join([]string{
 		i.GetColorAP(),
 		i.GetWidthAP(),
@@ -57,7 +57,7 @@ func (i *InkAnnotation) pointsCallback() string {
 
 func (i *InkAnnotation) GetLineStyleAP() string {
 	// return fmt.Sprintf("%d j %d J", i.StrikeLineJoin, i.StrikeLineCap)
-	return fmt.Sprintf("%d j %d J", 1, 1)
+	return fmt.Sprintf("%d j %d J", i.StrikeLineCap, i.StrikeLineJoin)
 }
 
 func (i *InkAnnotation) AddAnnotationToPage(ctx context.Context, instance pdfium.Pdfium) error {

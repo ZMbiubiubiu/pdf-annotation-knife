@@ -54,9 +54,9 @@ func TestAddSquareAnnotation(t *testing.T) {
 		Right:  200,
 		Bottom: 100,
 	}
-	squareAnnot.Width = 2
-	squareAnnot.StrikeColor = &color.RGBA{255, 0, 0, 255}
-	squareAnnot.FillColor = &color.RGBA{0, 255, 0, 255}
+	squareAnnot.Width = 10
+	squareAnnot.StrikeColor = &color.RGBA{255, 0, 0, 60}
+	squareAnnot.FillColor = &color.RGBA{0, 255, 0, 80}
 	squareAnnot.GenerateAppearance()
 	err = squareAnnot.AddAnnotationToPage(context.Background(), instance)
 	if err != nil {

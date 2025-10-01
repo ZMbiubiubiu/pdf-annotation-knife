@@ -58,6 +58,14 @@ func convertQuadPointToPdfiumFormat(quadPoints []QuadPoint) []structs.FPDF_FS_QU
 	return pdfiumQuadPoints
 }
 
+type BorderStyle struct {
+	Width     float32
+	Style     string
+	DashArray []int
+	Effect    string
+	EffectInt int
+}
+
 type BaseAnnotation struct {
 	NM          string
 	Page        requests.Page
@@ -155,7 +163,7 @@ func (b *BaseAnnotation) AddAnnotationToPage(ctx context.Context, instance pdfiu
 
 	// set ap
 	if b.AP != "" {
-		log.Printf("subtype:%d annot ap: %s\n", b.Subtype, b.AP)
+		log.Printf("\n\nsubtype:%d annot ap: %s\n", b.Subtype, b.AP)
 
 		_, err = instance.FPDFAnnot_SetAP(&requests.FPDFAnnot_SetAP{
 			Annotation:     b.Annotation,
