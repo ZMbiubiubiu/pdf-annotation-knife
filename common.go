@@ -163,7 +163,7 @@ func (b *BaseAnnotation) AddAnnotationToPage(ctx context.Context, instance pdfiu
 
 	// set ap
 	if b.AP != "" {
-		log.Printf("\n\nsubtype:%d annot ap: %s\n", b.Subtype, b.AP)
+		log.Printf("\n\nsubtype:%s annot ap: %s\n", b.GetSubtypeName(), b.AP)
 
 		_, err = instance.FPDFAnnot_SetAP(&requests.FPDFAnnot_SetAP{
 			Annotation:     b.Annotation,
@@ -177,4 +177,68 @@ func (b *BaseAnnotation) AddAnnotationToPage(ctx context.Context, instance pdfiu
 	}
 
 	return nil
+}
+
+func (b *BaseAnnotation) GetSubtypeName() string {
+	switch b.Subtype {
+	case enums.FPDF_ANNOT_SUBTYPE_CIRCLE:
+		return "Circle"
+	case enums.FPDF_ANNOT_SUBTYPE_SQUARE:
+		return "Square"
+	case enums.FPDF_ANNOT_SUBTYPE_CARET:
+		return "Caret"
+	case enums.FPDF_ANNOT_SUBTYPE_LINE:
+		return "Line"
+	case enums.FPDF_ANNOT_SUBTYPE_POLYGON:
+		return "Polygon"
+	case enums.FPDF_ANNOT_SUBTYPE_TEXT:
+		return "Text"
+	case enums.FPDF_ANNOT_SUBTYPE_FILEATTACHMENT:
+		return "FileAttachment"
+	case enums.FPDF_ANNOT_SUBTYPE_LINK:
+		return "Link"
+	case enums.FPDF_ANNOT_SUBTYPE_FREETEXT:
+		return "FreeText"
+	case enums.FPDF_ANNOT_SUBTYPE_INK:
+		return "Ink"
+	case enums.FPDF_ANNOT_SUBTYPE_HIGHLIGHT:
+		return "Highlight"
+	case enums.FPDF_ANNOT_SUBTYPE_MOVIE:
+		return "Movie"
+	case enums.FPDF_ANNOT_SUBTYPE_SOUND:
+		return "Sound"
+	case enums.FPDF_ANNOT_SUBTYPE_POPUP:
+		return "Popup"
+	case enums.FPDF_ANNOT_SUBTYPE_PRINTERMARK:
+		return "PrinterMark"
+	case enums.FPDF_ANNOT_SUBTYPE_POLYLINE:
+		return "Polyline"
+	case enums.FPDF_ANNOT_SUBTYPE_REDACT:
+		return "Redact"
+	case enums.FPDF_ANNOT_SUBTYPE_RICHMEDIA:
+		return "RichMedia"
+	case enums.FPDF_ANNOT_SUBTYPE_SCREEN:
+		return "Screen"
+	case enums.FPDF_ANNOT_SUBTYPE_WATERMARK:
+		return "Watermark"
+	case enums.FPDF_ANNOT_SUBTYPE_SQUIGGLY:
+		return "Squiggly"
+	case enums.FPDF_ANNOT_SUBTYPE_STAMP:
+		return "Stamp"
+	case enums.FPDF_ANNOT_SUBTYPE_STRIKEOUT:
+		return "Strikeout"
+	case enums.FPDF_ANNOT_SUBTYPE_THREED:
+		return "ThreeD"
+	case enums.FPDF_ANNOT_SUBTYPE_UNDERLINE:
+		return "Underline"
+	case enums.FPDF_ANNOT_SUBTYPE_TRAPNET:
+		return "TrapNet"
+	case enums.FPDF_ANNOT_SUBTYPE_WIDGET:
+		return "Widget"
+	case enums.FPDF_ANNOT_SUBTYPE_XFAWIDGET:
+		return "XFAWidget"
+
+	default:
+		return "Unknown"
+	}
 }

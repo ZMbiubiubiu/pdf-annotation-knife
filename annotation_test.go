@@ -210,8 +210,8 @@ func TestAddCircleAnnotation(t *testing.T) {
 		Bottom: 100,
 	}
 	circleAnnot.Width = 2
-	circleAnnot.StrikeColor = &color.RGBA{255, 0, 0, 255}
-	circleAnnot.FillColor = &color.RGBA{0, 255, 0, 255}
+	circleAnnot.StrikeColor = &color.RGBA{255, 0, 0, 120}
+	circleAnnot.FillColor = &color.RGBA{0, 255, 0, 120}
 	circleAnnot.GenerateAppearance()
 	err = circleAnnot.AddAnnotationToPage(context.Background(), instance)
 	if err != nil {
