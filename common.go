@@ -2,6 +2,7 @@ package annotation
 
 import (
 	"context"
+	"errors"
 	"image/color"
 	"log"
 
@@ -11,9 +12,6 @@ import (
 	"github.com/klippa-app/go-pdfium/requests"
 	"github.com/klippa-app/go-pdfium/structs"
 )
-
-// annotation width
-type Width float32
 
 type Rect struct {
 	Left, Bottom, Right, Top float32
@@ -68,17 +66,36 @@ type BorderStyle struct {
 
 type BaseAnnotation struct {
 	NM          string
+	Title       string
 	Page        requests.Page
 	Annotation  references.FPDF_ANNOTATION
 	Subtype     enums.FPDF_ANNOTATION_SUBTYPE
 	Rect        Rect
-	Width       Width
+	Width       float32
 	StrikeColor *color.RGBA
 	FillColor   *color.RGBA
 	AP          string
 }
 
+func (b *BaseAnnotation) PreCheck() error {
+	// rect
+	if IsZeroEpsilon(b.Rect.Left) && IsZeroEpsilon(b.Rect.Bottom) &&
+		IsZeroEpsilon(b.Rect.Right) && IsZeroEpsilon(b.Rect.Top) {
+		return errors.New("rect must be set")
+	}
+	// color
+	if b.StrikeColor == nil && b.FillColor == nil {
+		return errors.New("strike color or fill color must be set at least one")
+	}
+	return nil
+}
+
 func (b *BaseAnnotation) AddAnnotationToPage(ctx context.Context, instance pdfium.Pdfium) error {
+	// pre base check
+	err := b.PreCheck()
+	if err != nil {
+		return err
+	}
 
 	// create annot
 	annotRes, err := instance.FPDFPage_CreateAnnot(&requests.FPDFPage_CreateAnnot{
@@ -107,15 +124,17 @@ func (b *BaseAnnotation) AddAnnotationToPage(ctx context.Context, instance pdfiu
 	}
 
 	// set border
-	_, err = instance.FPDFAnnot_SetBorder(&requests.FPDFAnnot_SetBorder{
-		Annotation:       b.Annotation,
-		HorizontalRadius: 0,
-		VerticalRadius:   0,
-		BorderWidth:      float32(b.Width),
-	})
-	if err != nil {
-		log.Fatalf("set annot border failed: %v", err)
-		return err
+	if !IsZeroEpsilon(b.Width) {
+		_, err = instance.FPDFAnnot_SetBorder(&requests.FPDFAnnot_SetBorder{
+			Annotation:       b.Annotation,
+			HorizontalRadius: 0,
+			VerticalRadius:   0,
+			BorderWidth:      float32(b.Width),
+		})
+		if err != nil {
+			log.Fatalf("set annot border failed: %v", err)
+			return err
+		}
 	}
 
 	// set strike color

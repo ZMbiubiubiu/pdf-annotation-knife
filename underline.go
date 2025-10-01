@@ -3,6 +3,8 @@ package annotation
 
 import (
 	"context"
+	"fmt"
+	"strings"
 
 	"github.com/klippa-app/go-pdfium"
 	"github.com/klippa-app/go-pdfium/enums"
@@ -25,9 +27,25 @@ func NewUnderlineAnnotation(page requests.Page) *UnderlineAnnotation {
 }
 
 func (u *UnderlineAnnotation) GenerateAppearance() error {
-	// todo generate underline appearance
-	u.AP = ""
+	// generate underline appearance
+	u.AP = strings.Join([]string{
+		// "[] 0 d 0.571 w",
+		"1 w",
+		u.GetColorAP(),
+		u.GetPDFOpacityAP(),
+		u.pointsCallback(),
+	}, "\n")
 	return nil
+}
+
+func (u *UnderlineAnnotation) pointsCallback() string {
+	var ap string
+	for i := 0; i < len(u.QuadPoints); i++ {
+		ap += fmt.Sprintf("%.3f %.3f m ", u.QuadPoints[i].LeftBottomX, u.QuadPoints[i].LeftBottomY+1.3)
+		ap += fmt.Sprintf("%.3f %.3f l ", u.QuadPoints[i].RightBottomX, u.QuadPoints[i].RightBottomY+1.3)
+		ap += "S\n"
+	}
+	return ap
 }
 
 func (u *UnderlineAnnotation) AddAnnotationToPage(ctx context.Context, instance pdfium.Pdfium) error {

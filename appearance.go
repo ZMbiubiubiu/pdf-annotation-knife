@@ -6,7 +6,7 @@ import (
 	"strings"
 )
 
-func (b *BaseAnnotation) GetPDFColorAP(color *color.RGBA, isFill bool) string {
+func (b *BaseAnnotation) getColorAP(color *color.RGBA, isFill bool) string {
 
 	if color == nil {
 		return ""
@@ -33,8 +33,8 @@ func (b *BaseAnnotation) GetWidthAP() string {
 
 func (b *BaseAnnotation) GetColorAP() string {
 	return strings.Join([]string{
-		b.GetPDFColorAP(b.FillColor, true),
-		b.GetPDFColorAP(b.StrikeColor, false),
+		b.getColorAP(b.FillColor, true),
+		b.getColorAP(b.StrikeColor, false),
 	}, "\n")
 }
 

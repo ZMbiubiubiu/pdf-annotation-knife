@@ -3,6 +3,8 @@ package annotation
 
 import (
 	"context"
+	"fmt"
+	"strings"
 
 	"github.com/klippa-app/go-pdfium"
 	"github.com/klippa-app/go-pdfium/enums"
@@ -26,8 +28,23 @@ func NewStrikeoutAnnotation(page requests.Page) *StrikeoutAnnotation {
 
 func (s *StrikeoutAnnotation) GenerateAppearance() error {
 	// todo generate strikeout appearance
-	s.AP = ""
+	s.AP = strings.Join([]string{
+		"[] 0 d 1 w",
+		s.GetColorAP(),
+		s.GetPDFOpacityAP(),
+		s.pointsCallback(),
+	}, "\n")
 	return nil
+}
+
+func (s *StrikeoutAnnotation) pointsCallback() string {
+	var ap string
+	for i := 0; i < len(s.QuadPoints); i++ {
+		ap += fmt.Sprintf("%.3f %.3f m ", (s.QuadPoints[i].LeftTopX+s.QuadPoints[i].LeftBottomX)/2, (s.QuadPoints[i].LeftTopY+s.QuadPoints[i].LeftBottomY)/2)
+		ap += fmt.Sprintf("%.3f %.3f l ", (s.QuadPoints[i].RightTopX+s.QuadPoints[i].RightBottomX)/2, (s.QuadPoints[i].RightTopY+s.QuadPoints[i].RightBottomY)/2)
+		ap += "S\n"
+	}
+	return ap
 }
 
 func (s *StrikeoutAnnotation) AddAnnotationToPage(ctx context.Context, instance pdfium.Pdfium) error {

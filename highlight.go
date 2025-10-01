@@ -32,26 +32,27 @@ func NewHighlightAnnotation(page requests.Page) *HighlightAnnotation {
 }
 
 func (h *HighlightAnnotation) GenerateAppearance() error {
-	// todo generate highlight appearance
+	// generate highlight appearance
 	h.AP = strings.Join([]string{
-		h.GetPDFColorAP(h.StrikeColor, false),
+		h.GetColorAP(),
 		h.GetPDFOpacityAP(),
-		h.PointsCallback(h.QuadPoints),
+		h.pointsCallback(h.QuadPoints),
 		"f ",
 	}, "\n")
 
 	return nil
 }
 
-func (h *HighlightAnnotation) PointsCallback(quadPoints []QuadPoint) string {
-	var points string
+func (h *HighlightAnnotation) pointsCallback(quadPoints []QuadPoint) string {
+	var pointsAP string
 	for i := 0; i < len(quadPoints); i++ {
-		points += fmt.Sprintf("%f %f m ", quadPoints[i].LeftTopX, quadPoints[i].LeftTopY)
-		points += fmt.Sprintf("%f %f l ", quadPoints[i].RightTopX, quadPoints[i].RightTopY)
-		points += fmt.Sprintf("%f %f l ", quadPoints[i].RightBottomX, quadPoints[i].RightBottomY)
-		points += fmt.Sprintf("%f %f l ", quadPoints[i].LeftBottomX, quadPoints[i].LeftBottomY)
+		pointsAP += fmt.Sprintf("%.3f %.3f m ", quadPoints[i].LeftTopX, quadPoints[i].LeftTopY)
+		pointsAP += fmt.Sprintf("%.3f %.3f l ", quadPoints[i].RightTopX, quadPoints[i].RightTopY)
+		pointsAP += fmt.Sprintf("%.3f %.3f l ", quadPoints[i].RightBottomX, quadPoints[i].RightBottomY)
+		pointsAP += fmt.Sprintf("%.3f %.3f l ", quadPoints[i].LeftBottomX, quadPoints[i].LeftBottomY)
+		pointsAP += "f\n"
 	}
-	return points
+	return pointsAP
 }
 
 func (h *HighlightAnnotation) AddAnnotationToPage(ctx context.Context, instance pdfium.Pdfium) error {

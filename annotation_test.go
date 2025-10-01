@@ -124,6 +124,8 @@ func TestAddInkAnnotation(t *testing.T) {
 	inkAnnot.Width = 4
 	inkAnnot.StrikeColor = &color.RGBA{255, 0, 255, 120}
 	// inkAnnot.FillColor = &color.RGBA{0, 255, 0, 255}
+	inkAnnot.StrikeLineCap = 1
+	inkAnnot.StrikeLineJoin = 1
 	inkAnnot.GenerateAppearance()
 	err = inkAnnot.AddAnnotationToPage(context.Background(), instance)
 	if err != nil {
@@ -252,7 +254,7 @@ func TestAddHighlightAnnotation(t *testing.T) {
 		Right:  200,
 		Bottom: 100,
 	}
-	highlightAnnot.Width = 2
+	// highlightAnnot.Width = 2
 	highlightAnnot.StrikeColor = &color.RGBA{255, 0, 0, 120}
 	// highlightAnnot.FillColor = &color.RGBA{0, 255, 0, 255}
 	highlightAnnot.QuadPoints = []QuadPoint{
@@ -277,7 +279,7 @@ func TestAddHighlightAnnotation(t *testing.T) {
 			LeftBottomY:  300,
 		},
 	}
-	highlightAnnot.GenerateAppearance()
+	// highlightAnnot.GenerateAppearance()
 	err = highlightAnnot.AddAnnotationToPage(context.Background(), instance)
 	if err != nil {
 		t.Fatal(err)
@@ -312,14 +314,14 @@ func TestAddUnderlineAnnotation(t *testing.T) {
 
 	var underlineAnnot = NewUnderlineAnnotation(page)
 	underlineAnnot.Rect = Rect{
-		Left:   100,
-		Top:    200,
-		Right:  200,
-		Bottom: 100,
+		Left:   0,
+		Top:    410,
+		Right:  210,
+		Bottom: 0,
 	}
-	underlineAnnot.Width = 2
-	underlineAnnot.StrikeColor = &color.RGBA{255, 0, 0, 255}
-	underlineAnnot.FillColor = &color.RGBA{0, 255, 0, 255}
+	// underlineAnnot.Width = 2
+	underlineAnnot.StrikeColor = &color.RGBA{0, 255, 0, 255}
+	// underlineAnnot.FillColor = &color.RGBA{0, 255, 0, 255}
 	underlineAnnot.QuadPoints = []QuadPoint{
 		{
 			LeftTopX:     100,
@@ -330,6 +332,16 @@ func TestAddUnderlineAnnotation(t *testing.T) {
 			RightBottomY: 100,
 			LeftBottomX:  100,
 			LeftBottomY:  100,
+		},
+		{
+			LeftTopX:     100,
+			LeftTopY:     400,
+			RightTopX:    200,
+			RightTopY:    400,
+			RightBottomX: 200,
+			RightBottomY: 300,
+			LeftBottomX:  100,
+			LeftBottomY:  300,
 		},
 	}
 	underlineAnnot.GenerateAppearance()
@@ -374,7 +386,7 @@ func TestAddStrikeoutAnnotation(t *testing.T) {
 	}
 	strikeoutAnnot.Width = 2
 	strikeoutAnnot.StrikeColor = &color.RGBA{255, 0, 0, 255}
-	strikeoutAnnot.FillColor = &color.RGBA{0, 255, 0, 255}
+	// strikeoutAnnot.FillColor = &color.RGBA{0, 255, 0, 255}
 	strikeoutAnnot.QuadPoints = []QuadPoint{
 		{
 			LeftTopX:     100,
