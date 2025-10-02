@@ -124,8 +124,6 @@ func TestAddInkAnnotation(t *testing.T) {
 	inkAnnot.Width = 4
 	inkAnnot.SetStrikeColor(Color{R: 255, G: 0, B: 255})
 	inkAnnot.SetOpacity(120)
-	inkAnnot.StrikeLineCap = 1
-	inkAnnot.StrikeLineJoin = 1
 	inkAnnot.GenerateAppearance()
 	err = inkAnnot.AddAnnotationToPage(context.Background(), instance, page)
 	if err != nil {

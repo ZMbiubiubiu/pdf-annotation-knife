@@ -13,8 +13,8 @@ import (
 type InkAnnotation struct {
 	BaseAnnotation
 	Points         [][]Point
-	StrikeLineCap  int
-	StrikeLineJoin int
+	strikeLineCap  enums.FPDF_LINECAP
+	strikeLineJoin enums.FPDF_LINEJOIN
 }
 
 func NewInkAnnotation() *InkAnnotation {
@@ -24,7 +24,19 @@ func NewInkAnnotation() *InkAnnotation {
 			nm:      GenerateUUID(),
 			opacity: DefaultOpacity,
 		},
+		strikeLineCap:  enums.FPDF_LINECAP_ROUND,
+		strikeLineJoin: enums.FPDF_LINEJOIN_ROUND,
 	}
+}
+
+// SetStrikeLineCap sets the line cap style for the stroke.
+func (i *InkAnnotation) SetStrikeLineCap(lineCap enums.FPDF_LINECAP) {
+	i.strikeLineCap = lineCap
+}
+
+// SetStrikeLineJoin sets the line join style for the stroke.
+func (i *InkAnnotation) SetStrikeLineJoin(lineJoin enums.FPDF_LINEJOIN) {
+	i.strikeLineJoin = lineJoin
 }
 
 func (i *InkAnnotation) GenerateAppearance() error {
@@ -57,7 +69,7 @@ func (i *InkAnnotation) pointsCallback() string {
 
 func (i *InkAnnotation) GetLineStyleAP() string {
 	// return fmt.Sprintf("%d j %d J", i.StrikeLineJoin, i.StrikeLineCap)
-	return fmt.Sprintf("%d j %d J", i.StrikeLineCap, i.StrikeLineJoin)
+	return fmt.Sprintf("%d j %d J", i.strikeLineCap, i.strikeLineJoin)
 }
 
 func (i *InkAnnotation) AddAnnotationToPage(ctx context.Context, instance pdfium.Pdfium, page requests.Page) error {

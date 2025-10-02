@@ -45,7 +45,6 @@ func (h *HighlightAnnotation) GenerateAppearance() error {
 // highlight is different from underline&strikeout
 // it should set fill color instead of stroke color
 func (h *HighlightAnnotation) SetStrikeColor(c Color)  {
-
 	h.fillColor = &c
 }
 
