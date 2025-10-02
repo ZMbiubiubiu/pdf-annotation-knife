@@ -4,7 +4,6 @@ package annotation
 import (
 	"context"
 	"fmt"
-	"image/color"
 	"math"
 	"strings"
 
@@ -27,13 +26,14 @@ type CircleAnnotation struct {
 func NewCircleAnnotation() *CircleAnnotation {
 	return &CircleAnnotation{
 		BaseAnnotation: BaseAnnotation{
-			Subtype: enums.FPDF_ANNOT_SUBTYPE_CIRCLE,
-			NM:      GenerateUUID(),
+			subtype: enums.FPDF_ANNOT_SUBTYPE_CIRCLE,
+			nm:      GenerateUUID(),
+			opacity: DefaultOpacity,
 		},
 	}
 }
 
-func (c *CircleAnnotation) SetFillColor(color color.RGBA) {
+func (c *CircleAnnotation) SetFillColor(color Color) {
 	c.fillColor = &color
 }
 
@@ -87,7 +87,7 @@ func (c *CircleAnnotation) AddAnnotationToPage(ctx context.Context, instance pdf
 
 	// close annotation
 	_, err = instance.FPDFPage_CloseAnnot(&requests.FPDFPage_CloseAnnot{
-		Annotation: c.Annotation,
+		Annotation: c.annot,
 	})
 	if err != nil {
 		return err

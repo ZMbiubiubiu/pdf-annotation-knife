@@ -2,7 +2,6 @@ package annotation
 
 import (
 	"context"
-	"image/color"
 	"log"
 	"os"
 	"strings"
@@ -55,8 +54,9 @@ func TestAddSquareAnnotation(t *testing.T) {
 		Bottom: 100,
 	})
 	squareAnnot.Width = 10
-	squareAnnot.SetStrikeColor(color.RGBA{255, 0, 0, 60})
-	squareAnnot.SetFillColor(color.RGBA{0, 255, 0, 80})
+	squareAnnot.SetStrikeColor(Color{R: 255, G: 0, B: 0})
+	squareAnnot.SetFillColor(Color{R: 0, G: 255, B: 0})
+	squareAnnot.SetOpacity(120)
 	squareAnnot.GenerateAppearance()
 	err = squareAnnot.AddAnnotationToPage(context.Background(), instance, page)
 	if err != nil {
@@ -122,8 +122,8 @@ func TestAddInkAnnotation(t *testing.T) {
 		Right:  200,
 	})
 	inkAnnot.Width = 4
-	inkAnnot.SetStrikeColor(color.RGBA{255, 0, 255, 120})
-	// inkAnnot.FillColor = &color.RGBA{0, 255, 0, 255}
+	inkAnnot.SetStrikeColor(Color{R: 255, G: 0, B: 255})
+	inkAnnot.SetOpacity(120)
 	inkAnnot.StrikeLineCap = 1
 	inkAnnot.StrikeLineJoin = 1
 	inkAnnot.GenerateAppearance()
@@ -167,9 +167,10 @@ func TestAddFreeTextAnnotation(t *testing.T) {
 		Bottom: 100,
 	})
 	freeTextAnnot.Width = 2
-	freeTextAnnot.SetStrikeColor(color.RGBA{255, 0, 0, 255})
+	freeTextAnnot.SetStrikeColor(Color{R: 255, G: 0, B: 0})
+	freeTextAnnot.SetOpacity(120)
 	freeTextAnnot.Contents = "Hello, World!"
-	freeTextAnnot.FontColor = &color.RGBA{255, 0, 0, 255}
+	freeTextAnnot.FontColor = &Color{R: 255, G: 0, B: 0}
 	freeTextAnnot.GenerateAppearance()
 	err = freeTextAnnot.AddAnnotationToPage(context.Background(), instance, page)
 	if err != nil {
@@ -211,8 +212,9 @@ func TestAddCircleAnnotation(t *testing.T) {
 		Bottom: 100,
 	})
 	circleAnnot.Width = 2
-	circleAnnot.SetStrikeColor(color.RGBA{255, 0, 0, 120})
-	circleAnnot.SetFillColor(color.RGBA{0, 255, 0, 120})
+	circleAnnot.SetStrikeColor(Color{R: 255, G: 0, B: 0})
+	circleAnnot.SetFillColor(Color{R: 0, G: 255, B: 0})
+	circleAnnot.SetOpacity(120)
 	circleAnnot.GenerateAppearance()
 	err = circleAnnot.AddAnnotationToPage(context.Background(), instance, page)
 	if err != nil {
@@ -248,14 +250,14 @@ func TestAddHighlightAnnotation(t *testing.T) {
 
 	var highlightAnnot = NewHighlightAnnotation()
 	highlightAnnot.SetRect(Rect{
-		Left:   100,
+		Left:   0,
 		Top:    400,
 		Right:  200,
-		Bottom: 100,
+		Bottom: 0,
 	})
-	// highlightAnnot.Width = 2
-	highlightAnnot.SetStrikeColor(color.RGBA{255, 0, 0, 120})
-	// highlightAnnot.FillColor = &color.RGBA{0, 255, 0, 255}
+	highlightAnnot.SetOpacity(120)
+	highlightAnnot.SetStrikeColor(Color{R: 255, G: 0, B: 0})
+	// highlightAnnot.SetFillColor(Color{R: 0, G: 255, B: 0})
 	highlightAnnot.QuadPoints = []QuadPoint{
 		{
 			LeftTopX:     100,
@@ -318,9 +320,8 @@ func TestAddUnderlineAnnotation(t *testing.T) {
 		Right:  210,
 		Bottom: 0,
 	})
-	// underlineAnnot.Width = 2
-	underlineAnnot.SetStrikeColor(color.RGBA{0, 255, 0, 255})
-	// underlineAnnot.FillColor = &color.RGBA{0, 255, 0, 255}
+	underlineAnnot.SetStrikeColor(Color{R: 0, G: 255, B: 0})
+	underlineAnnot.SetOpacity(120)
 	underlineAnnot.QuadPoints = []QuadPoint{
 		{
 			LeftTopX:     100,
@@ -384,8 +385,8 @@ func TestAddStrikeoutAnnotation(t *testing.T) {
 		Bottom: 100,
 	})
 	strikeoutAnnot.Width = 2
-	strikeoutAnnot.SetStrikeColor(color.RGBA{255, 0, 0, 255})
-	// strikeoutAnnot.FillColor = &color.RGBA{0, 255, 0, 255}
+	strikeoutAnnot.SetStrikeColor(Color{R: 255, G: 0, B: 0})
+	strikeoutAnnot.SetOpacity(120)
 	strikeoutAnnot.QuadPoints = []QuadPoint{
 		{
 			LeftTopX:     100,

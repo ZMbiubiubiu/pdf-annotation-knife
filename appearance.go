@@ -2,16 +2,15 @@ package annotation
 
 import (
 	"fmt"
-	"image/color"
 	"strings"
 )
 
-func (b *BaseAnnotation) getColorAP(color *color.RGBA, isFill bool) string {
+func (b *BaseAnnotation) getColorAP(color *Color, isFill bool) string {
 
 	if color == nil {
 		return ""
 	}
-	
+
 	var op string
 	if color.R == color.G && color.G == color.B {
 		op = "G" // Set gray level for stroking (outline) operations.
@@ -39,5 +38,8 @@ func (b *BaseAnnotation) GetColorAP() string {
 }
 
 func (b *BaseAnnotation) GetPDFOpacityAP() string {
+	if b.opacity == DefaultOpacity {
+		return ""
+	}
 	return "/GS gs"
 }

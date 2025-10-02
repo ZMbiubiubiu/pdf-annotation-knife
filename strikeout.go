@@ -19,8 +19,9 @@ type StrikeoutAnnotation struct {
 func NewStrikeoutAnnotation() *StrikeoutAnnotation {
 	return &StrikeoutAnnotation{
 		BaseAnnotation: BaseAnnotation{
-			Subtype: enums.FPDF_ANNOT_SUBTYPE_STRIKEOUT,
-			NM:      GenerateUUID(),
+			subtype: enums.FPDF_ANNOT_SUBTYPE_STRIKEOUT,
+			nm:      GenerateUUID(),
+			opacity: DefaultOpacity,
 		},
 	}
 }
@@ -57,7 +58,7 @@ func (s *StrikeoutAnnotation) AddAnnotationToPage(ctx context.Context, instance 
 	quadPoints := convertQuadPointToPdfiumFormat(s.QuadPoints)
 	for _, points := range quadPoints {
 		_, err = instance.FPDFAnnot_AppendAttachmentPoints(&requests.FPDFAnnot_AppendAttachmentPoints{
-			Annotation:       s.Annotation,
+			Annotation:       s.annot,
 			AttachmentPoints: points,
 		})
 		if err != nil {
@@ -67,7 +68,7 @@ func (s *StrikeoutAnnotation) AddAnnotationToPage(ctx context.Context, instance 
 
 	// close annotation
 	_, err = instance.FPDFPage_CloseAnnot(&requests.FPDFPage_CloseAnnot{
-		Annotation: s.Annotation,
+		Annotation: s.annot,
 	})
 	if err != nil {
 		return err

@@ -20,8 +20,9 @@ type InkAnnotation struct {
 func NewInkAnnotation() *InkAnnotation {
 	return &InkAnnotation{
 		BaseAnnotation: BaseAnnotation{
-			Subtype: enums.FPDF_ANNOT_SUBTYPE_INK,
-			NM:      GenerateUUID(),
+			subtype: enums.FPDF_ANNOT_SUBTYPE_INK,
+			nm:      GenerateUUID(),
+			opacity: DefaultOpacity,
 		},
 	}
 }
@@ -69,7 +70,7 @@ func (i *InkAnnotation) AddAnnotationToPage(ctx context.Context, instance pdfium
 	for _, points := range i.Points {
 		p := convertPointToPdfiumFormat(points)
 		_, err = instance.FPDFAnnot_AddInkStroke(&requests.FPDFAnnot_AddInkStroke{
-			Annotation: i.Annotation,
+			Annotation: i.annot,
 			Points:     p,
 		})
 		if err != nil {
@@ -79,7 +80,7 @@ func (i *InkAnnotation) AddAnnotationToPage(ctx context.Context, instance pdfium
 
 	// close annotation
 	_, err = instance.FPDFPage_CloseAnnot(&requests.FPDFPage_CloseAnnot{
-		Annotation: i.Annotation,
+		Annotation: i.annot,
 	})
 	if err != nil {
 		return err

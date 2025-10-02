@@ -4,7 +4,6 @@ package annotation
 import (
 	"context"
 	"fmt"
-	"image/color"
 	"strings"
 
 	"github.com/klippa-app/go-pdfium"
@@ -13,7 +12,7 @@ import (
 )
 
 var (
-	DefaultHighlightColor = color.RGBA{255, 255, 0, 255} // Default color is yellow in Acrobat Reader
+	DefaultHighlightColor = Color{R: 255, G: 255, B: 0} // Default color is yellow in Acrobat Reader
 )
 
 type HighlightAnnotation struct {
@@ -24,8 +23,9 @@ type HighlightAnnotation struct {
 func NewHighlightAnnotation() *HighlightAnnotation {
 	return &HighlightAnnotation{
 		BaseAnnotation: BaseAnnotation{
-			Subtype: enums.FPDF_ANNOT_SUBTYPE_HIGHLIGHT,
-			NM:      GenerateUUID(),
+			subtype: enums.FPDF_ANNOT_SUBTYPE_HIGHLIGHT,
+			nm:      GenerateUUID(),
+			opacity: DefaultOpacity,
 		},
 	}
 }
@@ -33,23 +33,30 @@ func NewHighlightAnnotation() *HighlightAnnotation {
 func (h *HighlightAnnotation) GenerateAppearance() error {
 	// generate highlight appearance
 	h.ap = strings.Join([]string{
-		h.GetColorAP(),
 		h.GetPDFOpacityAP(),
-		h.pointsCallback(h.QuadPoints),
-		"f ",
+		h.GetColorAP(),
+		h.pointsCallback(),
 	}, "\n")
 
 	return nil
 }
 
-func (h *HighlightAnnotation) pointsCallback(quadPoints []QuadPoint) string {
+// SetStrikeColor sets the color of the highlight annotation.
+// highlight is different from underline&strikeout
+// it should set fill color instead of stroke color
+func (h *HighlightAnnotation) SetStrikeColor(c Color)  {
+
+	h.fillColor = &c
+}
+
+func (h *HighlightAnnotation) pointsCallback() string {
 	var pointsAP string
-	for i := 0; i < len(quadPoints); i++ {
-		pointsAP += fmt.Sprintf("%.3f %.3f m ", quadPoints[i].LeftTopX, quadPoints[i].LeftTopY)
-		pointsAP += fmt.Sprintf("%.3f %.3f l ", quadPoints[i].RightTopX, quadPoints[i].RightTopY)
-		pointsAP += fmt.Sprintf("%.3f %.3f l ", quadPoints[i].RightBottomX, quadPoints[i].RightBottomY)
-		pointsAP += fmt.Sprintf("%.3f %.3f l ", quadPoints[i].LeftBottomX, quadPoints[i].LeftBottomY)
-		pointsAP += "f\n"
+	for i := 0; i < len(h.QuadPoints); i++ {
+		pointsAP += fmt.Sprintf("%.3f %.3f m ", h.QuadPoints[i].LeftTopX, h.QuadPoints[i].LeftTopY)
+		pointsAP += fmt.Sprintf("%.3f %.3f l ", h.QuadPoints[i].RightTopX, h.QuadPoints[i].RightTopY)
+		pointsAP += fmt.Sprintf("%.3f %.3f l ", h.QuadPoints[i].RightBottomX, h.QuadPoints[i].RightBottomY)
+		pointsAP += fmt.Sprintf("%.3f %.3f l ", h.QuadPoints[i].LeftBottomX, h.QuadPoints[i].LeftBottomY)
+		pointsAP += "h f\n"
 	}
 	return pointsAP
 }
@@ -68,7 +75,7 @@ func (h *HighlightAnnotation) AddAnnotationToPage(ctx context.Context, instance 
 	quadPoints := convertQuadPointToPdfiumFormat(h.QuadPoints)
 	for _, points := range quadPoints {
 		_, err = instance.FPDFAnnot_AppendAttachmentPoints(&requests.FPDFAnnot_AppendAttachmentPoints{
-			Annotation:       h.Annotation,
+			Annotation:       h.annot,
 			AttachmentPoints: points,
 		})
 		if err != nil {
@@ -78,7 +85,7 @@ func (h *HighlightAnnotation) AddAnnotationToPage(ctx context.Context, instance 
 
 	// close annotation
 	_, err = instance.FPDFPage_CloseAnnot(&requests.FPDFPage_CloseAnnot{
-		Annotation: h.Annotation,
+		Annotation: h.annot,
 	})
 	if err != nil {
 		return err

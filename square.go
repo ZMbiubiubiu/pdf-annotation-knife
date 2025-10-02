@@ -4,7 +4,6 @@ package annotation
 import (
 	"context"
 	"fmt"
-	"image/color"
 	"strings"
 
 	"github.com/klippa-app/go-pdfium"
@@ -19,13 +18,14 @@ type SquareAnnotation struct {
 func NewSquareAnnotation() *SquareAnnotation {
 	return &SquareAnnotation{
 		BaseAnnotation: BaseAnnotation{
-			Subtype: enums.FPDF_ANNOT_SUBTYPE_SQUARE,
-			NM:      GenerateUUID(),
+			subtype: enums.FPDF_ANNOT_SUBTYPE_SQUARE,
+			nm:      GenerateUUID(),
+			opacity: DefaultOpacity,
 		},
 	}
 }
 
-func (s *SquareAnnotation) SetFillColor(c color.RGBA) {
+func (s *SquareAnnotation) SetFillColor(c Color) {
 	s.fillColor = &c
 }
 
@@ -63,7 +63,7 @@ func (s *SquareAnnotation) AddAnnotationToPage(ctx context.Context, instance pdf
 	}
 
 	_, err = instance.FPDFPage_CloseAnnot(&requests.FPDFPage_CloseAnnot{
-		Annotation: s.Annotation,
+		Annotation: s.annot,
 	})
 	if err != nil {
 		return err

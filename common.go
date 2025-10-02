@@ -3,7 +3,6 @@ package annotation
 import (
 	"context"
 	"errors"
-	"image/color"
 	"log"
 
 	"github.com/klippa-app/go-pdfium"
@@ -11,6 +10,10 @@ import (
 	"github.com/klippa-app/go-pdfium/references"
 	"github.com/klippa-app/go-pdfium/requests"
 	"github.com/klippa-app/go-pdfium/structs"
+)
+
+const (
+	DefaultOpacity = 255 // default opacity is 100%
 )
 
 type Rect struct {
@@ -64,15 +67,20 @@ type BorderStyle struct {
 	EffectInt int
 }
 
+type Color struct {
+	R, G, B uint8
+}
+
 type BaseAnnotation struct {
-	NM          string
+	nm          string // annotation unique name
 	title       string
-	Annotation  references.FPDF_ANNOTATION
-	Subtype     enums.FPDF_ANNOTATION_SUBTYPE
+	annot       references.FPDF_ANNOTATION
+	subtype     enums.FPDF_ANNOTATION_SUBTYPE
 	rect        Rect
 	Width       float32
-	strikeColor *color.RGBA
-	fillColor   *color.RGBA
+	opacity     uint8 // [0 -255]
+	strikeColor *Color
+	fillColor   *Color
 	ap          string
 }
 
@@ -86,8 +94,13 @@ func (b *BaseAnnotation) SetRect(rect Rect) {
 	b.rect = rect
 }
 
+// SetOpacity sets the opacity of the annotation.
+func (b *BaseAnnotation) SetOpacity(opacity uint8) {
+	b.opacity = opacity
+}
+
 // SetStrikeColor sets the strike color of the annotation.
-func (b *BaseAnnotation) SetStrikeColor(c color.RGBA) {
+func (b *BaseAnnotation) SetStrikeColor(c Color) {
 	b.strikeColor = &c
 }
 
@@ -114,18 +127,18 @@ func (b *BaseAnnotation) AddAnnotationToPage(ctx context.Context, instance pdfiu
 	// create annot
 	annotRes, err := instance.FPDFPage_CreateAnnot(&requests.FPDFPage_CreateAnnot{
 		Page:    page,
-		Subtype: b.Subtype,
+		Subtype: b.subtype,
 	})
 	if err != nil {
 		log.Fatalf("create annot failed: %v", err)
 		return err
 	}
-	b.Annotation = annotRes.Annotation
+	b.annot = annotRes.Annotation
 
 	// set title
 	if b.title != "" {
 		_, err = instance.FPDFAnnot_SetStringValue(&requests.FPDFAnnot_SetStringValue{
-			Annotation: b.Annotation,
+			Annotation: b.annot,
 			Key:        "T",
 			Value:      b.title,
 		})
@@ -137,7 +150,7 @@ func (b *BaseAnnotation) AddAnnotationToPage(ctx context.Context, instance pdfiu
 
 	// set rect
 	_, err = instance.FPDFAnnot_SetRect(&requests.FPDFAnnot_SetRect{
-		Annotation: b.Annotation,
+		Annotation: b.annot,
 		Rect: structs.FPDF_FS_RECTF{
 			Left:   b.rect.Left,
 			Bottom: b.rect.Bottom,
@@ -153,7 +166,7 @@ func (b *BaseAnnotation) AddAnnotationToPage(ctx context.Context, instance pdfiu
 	// set border
 	if !IsZeroEpsilon(b.Width) {
 		_, err = instance.FPDFAnnot_SetBorder(&requests.FPDFAnnot_SetBorder{
-			Annotation:       b.Annotation,
+			Annotation:       b.annot,
 			HorizontalRadius: 0,
 			VerticalRadius:   0,
 			BorderWidth:      float32(b.Width),
@@ -167,12 +180,12 @@ func (b *BaseAnnotation) AddAnnotationToPage(ctx context.Context, instance pdfiu
 	// set strike color
 	if b.strikeColor != nil {
 		_, err = instance.FPDFAnnot_SetColor(&requests.FPDFAnnot_SetColor{
-			Annotation: b.Annotation,
+			Annotation: b.annot,
 			ColorType:  enums.FPDFANNOT_COLORTYPE_Color,
 			R:          uint(b.strikeColor.R),
 			G:          uint(b.strikeColor.G),
 			B:          uint(b.strikeColor.B),
-			A:          uint(b.strikeColor.A),
+			A:          uint(b.opacity),
 		})
 		if err != nil {
 			log.Fatalf("set annot strike color failed: %v", err)
@@ -183,36 +196,39 @@ func (b *BaseAnnotation) AddAnnotationToPage(ctx context.Context, instance pdfiu
 	// set fill color
 	if b.fillColor != nil {
 		_, err = instance.FPDFAnnot_SetColor(&requests.FPDFAnnot_SetColor{
-			Annotation: b.Annotation,
+			Annotation: b.annot,
 			ColorType:  enums.FPDFANNOT_COLORTYPE_InteriorColor,
 			R:          uint(b.fillColor.R),
 			G:          uint(b.fillColor.G),
 			B:          uint(b.fillColor.B),
-			A:          uint(b.fillColor.A),
+			A:          uint(b.opacity),
 		})
 		if err != nil {
 			log.Fatalf("set annot fill color failed: %v", err)
 			return err
 		}
-	}
+	}	
 
 	// set nm
-	_, err = instance.FPDFAnnot_SetStringValue(&requests.FPDFAnnot_SetStringValue{
-		Annotation: b.Annotation,
-		Key:        "NM",
-		Value:      b.NM,
-	})
-	if err != nil {
-		log.Fatalf("set annot nm failed: %v", err)
-		return err
+	if b.nm != "" {
+		_, err = instance.FPDFAnnot_SetStringValue(&requests.FPDFAnnot_SetStringValue{
+			Annotation: b.annot,
+			Key:        "NM",
+			Value:      b.nm,
+		})
+		if err != nil {
+			log.Fatalf("set annot nm failed: %v", err)
+			return err
+		}	
 	}
+
 
 	// set ap
 	if b.ap != "" {
 		log.Printf("\n\nsubtype:%s annot ap: %s\n", b.GetSubtypeName(), b.ap)
 
 		_, err = instance.FPDFAnnot_SetAP(&requests.FPDFAnnot_SetAP{
-			Annotation:     b.Annotation,
+			Annotation:     b.annot,
 			AppearanceMode: enums.FPDF_ANNOT_APPEARANCEMODE_NORMAL,
 			Value:          &b.ap,
 		})
@@ -226,7 +242,7 @@ func (b *BaseAnnotation) AddAnnotationToPage(ctx context.Context, instance pdfiu
 }
 
 func (b *BaseAnnotation) GetSubtypeName() string {
-	switch b.Subtype {
+	switch b.subtype {
 	case enums.FPDF_ANNOT_SUBTYPE_CIRCLE:
 		return "Circle"
 	case enums.FPDF_ANNOT_SUBTYPE_SQUARE:

@@ -19,8 +19,9 @@ type UnderlineAnnotation struct {
 func NewUnderlineAnnotation() *UnderlineAnnotation {
 	return &UnderlineAnnotation{
 		BaseAnnotation: BaseAnnotation{
-			Subtype: enums.FPDF_ANNOT_SUBTYPE_UNDERLINE,
-			NM:      GenerateUUID(),
+			subtype: enums.FPDF_ANNOT_SUBTYPE_UNDERLINE,
+			nm:      GenerateUUID(),
+			opacity: DefaultOpacity,
 		},
 	}
 }
@@ -58,7 +59,7 @@ func (u *UnderlineAnnotation) AddAnnotationToPage(ctx context.Context, instance 
 	quadPoints := convertQuadPointToPdfiumFormat(u.QuadPoints)
 	for _, points := range quadPoints {
 		_, err = instance.FPDFAnnot_AppendAttachmentPoints(&requests.FPDFAnnot_AppendAttachmentPoints{
-			Annotation:       u.Annotation,
+			Annotation:       u.annot,
 			AttachmentPoints: points,
 		})
 		if err != nil {
@@ -68,7 +69,7 @@ func (u *UnderlineAnnotation) AddAnnotationToPage(ctx context.Context, instance 
 
 	// close annotation
 	_, err = instance.FPDFPage_CloseAnnot(&requests.FPDFPage_CloseAnnot{
-		Annotation: u.Annotation,
+		Annotation: u.annot,
 	})
 	if err != nil {
 		return err

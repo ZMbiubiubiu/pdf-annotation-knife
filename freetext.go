@@ -4,7 +4,6 @@ package annotation
 import (
 	"context"
 	"fmt"
-	"image/color"
 
 	"github.com/klippa-app/go-pdfium"
 	"github.com/klippa-app/go-pdfium/enums"
@@ -13,21 +12,22 @@ import (
 
 var (
 	DefaultFontSize  = 12
-	DefaultFontColor = color.RGBA{0, 0, 0, 255}
+	DefaultFontColor = Color{R: 0, G: 0, B: 0}
 )
 
 type FreeTextAnnotation struct {
 	BaseAnnotation
 	Contents  string
-	FontColor *color.RGBA
+	FontColor *Color
 	FontSize  int
 }
 
 func NewFreeTextAnnotation() *FreeTextAnnotation {
 	return &FreeTextAnnotation{
 		BaseAnnotation: BaseAnnotation{
-			Subtype: enums.FPDF_ANNOT_SUBTYPE_FREETEXT,
-			NM:      GenerateUUID(),
+			subtype: enums.FPDF_ANNOT_SUBTYPE_FREETEXT,
+			nm:      GenerateUUID(),
+			opacity: DefaultOpacity,
 		},
 	}
 }
@@ -55,7 +55,7 @@ func (f *FreeTextAnnotation) AddAnnotationToPage(ctx context.Context, instance p
 
 	// set contents
 	_, err = instance.FPDFAnnot_SetStringValue(&requests.FPDFAnnot_SetStringValue{
-		Annotation: f.Annotation,
+		Annotation: f.annot,
 		Key:        "Contents",
 		Value:      f.Contents,
 	})
@@ -66,7 +66,7 @@ func (f *FreeTextAnnotation) AddAnnotationToPage(ctx context.Context, instance p
 	// set font color
 	da := fmt.Sprintf("%d Tf %.3f %.3f %.3f rg ", 12, float32(f.FontColor.R)/255, float32(f.FontColor.G)/255, float32(f.FontColor.B)/255)
 	_, err = instance.FPDFAnnot_SetStringValue(&requests.FPDFAnnot_SetStringValue{
-		Annotation: f.Annotation,
+		Annotation: f.annot,
 		Key:        "DA",
 		Value:      da,
 	})
