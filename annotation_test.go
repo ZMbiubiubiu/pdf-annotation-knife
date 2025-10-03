@@ -4,7 +4,6 @@ import (
 	"context"
 	"log"
 	"os"
-	"strings"
 	"testing"
 	"time"
 
@@ -30,7 +29,7 @@ func init() {
 
 func TestAddSquareAnnotation(t *testing.T) {
 	inputFile := "simple.pdf"
-	outputFile := strings.ReplaceAll(inputFile, ".pdf", "_add_square.pdf")
+	outputFile := "data/simple_square.pdf"
 	os.Remove(outputFile)
 	docRes, err := instance.OpenDocument(&requests.OpenDocument{
 		FilePath: &inputFile,
@@ -74,7 +73,7 @@ func TestAddSquareAnnotation(t *testing.T) {
 
 func TestAddInkAnnotation(t *testing.T) {
 	inputFile := "simple.pdf"
-	outputFile := strings.ReplaceAll(inputFile, ".pdf", "_add_ink.pdf")
+	outputFile := "data/simple_ink.pdf"
 	os.Remove(outputFile)
 	docRes, err := instance.OpenDocument(&requests.OpenDocument{
 		FilePath: &inputFile,
@@ -141,7 +140,7 @@ func TestAddInkAnnotation(t *testing.T) {
 
 func TestAddFreeTextAnnotation(t *testing.T) {
 	inputFile := "simple.pdf"
-	outputFile := strings.ReplaceAll(inputFile, ".pdf", "_add_freetext.pdf")
+	outputFile := "data/simple_freetext.pdf"
 	os.Remove(outputFile)
 	docRes, err := instance.OpenDocument(&requests.OpenDocument{
 		FilePath: &inputFile,
@@ -186,7 +185,7 @@ func TestAddFreeTextAnnotation(t *testing.T) {
 
 func TestAddCircleAnnotation(t *testing.T) {
 	inputFile := "simple.pdf"
-	outputFile := strings.ReplaceAll(inputFile, ".pdf", "_add_circle.pdf")
+	outputFile := "data/simple_circle.pdf"
 	os.Remove(outputFile)
 	docRes, err := instance.OpenDocument(&requests.OpenDocument{
 		FilePath: &inputFile,
@@ -230,7 +229,7 @@ func TestAddCircleAnnotation(t *testing.T) {
 
 func TestAddHighlightAnnotation(t *testing.T) {
 	inputFile := "simple.pdf"
-	outputFile := strings.ReplaceAll(inputFile, ".pdf", "_add_highlight.pdf")
+	outputFile := "data/simple_highlight.pdf"
 	os.Remove(outputFile)
 	docRes, err := instance.OpenDocument(&requests.OpenDocument{
 		FilePath: &inputFile,
@@ -295,7 +294,7 @@ func TestAddHighlightAnnotation(t *testing.T) {
 
 func TestAddUnderlineAnnotation(t *testing.T) {
 	inputFile := "simple.pdf"
-	outputFile := strings.ReplaceAll(inputFile, ".pdf", "_add_underline.pdf")
+	outputFile := "data/simple_underline.pdf"
 	os.Remove(outputFile)
 	docRes, err := instance.OpenDocument(&requests.OpenDocument{
 		FilePath: &inputFile,
@@ -359,7 +358,7 @@ func TestAddUnderlineAnnotation(t *testing.T) {
 
 func TestAddStrikeoutAnnotation(t *testing.T) {
 	inputFile := "simple.pdf"
-	outputFile := strings.ReplaceAll(inputFile, ".pdf", "_add_strikeout.pdf")
+	outputFile := "data/simple_strikeout.pdf"
 	os.Remove(outputFile)
 	docRes, err := instance.OpenDocument(&requests.OpenDocument{
 		FilePath: &inputFile,
@@ -410,4 +409,141 @@ func TestAddStrikeoutAnnotation(t *testing.T) {
 	if err != nil {
 		t.Fatalf("save strikeout document failed: %v", err)
 	}
+}
+
+func TestAddStampAnnotation(t *testing.T) {
+	inputFile := "simple.pdf"
+
+	t.Run("add path to stamp annot", func(t *testing.T) {
+
+		docRes, err := instance.OpenDocument(&requests.OpenDocument{
+			FilePath: &inputFile,
+		})
+		if err != nil {
+			t.Fatalf("open document failed: %v", err)
+		}
+
+		page := requests.Page{
+			ByIndex: &requests.PageByIndex{
+				Document: docRes.Document,
+				Index:    0,
+			},
+		}
+
+		var stampAnnot = NewStampAnnotation()
+		stampAnnot.SetRect(Rect{
+			Left:   0,
+			Bottom: 0,
+			Top:    200,
+			Right:  200,
+		})
+
+		outputFile := "data/simple_stamp_path.pdf"
+		os.Remove(outputFile)
+		stampAnnot.SetPathObject([][]Point{
+			{
+				{X: 100, Y: 100},
+				{X: 102, Y: 98},
+				{X: 104, Y: 102},
+				{X: 106, Y: 100},
+				{X: 108, Y: 98},
+				{X: 110, Y: 100},
+				{X: 112, Y: 102},
+				{X: 114, Y: 100},
+				{X: 116, Y: 98},
+				{X: 118, Y: 100},
+				{X: 120, Y: 102},
+			},
+			{
+				{X: 50, Y: 100},
+				{X: 52, Y: 98},
+				{X: 54, Y: 102},
+				{X: 56, Y: 100},
+				{X: 58, Y: 98},
+				{X: 60, Y: 100},
+				{X: 62, Y: 102},
+				{X: 64, Y: 100},
+				{X: 66, Y: 98},
+				{X: 68, Y: 100},
+				{X: 70, Y: 102},
+			},
+		}, 2, Color{R: 255, G: 0, B: 255}, 120)
+		// stampAnnot.GenerateAppearance()
+		err = stampAnnot.AddAnnotationToPage(context.Background(), instance, page)
+		if err != nil {
+			t.Fatal(err)
+		}
+
+		_, err = instance.FPDF_SaveAsCopy(&requests.FPDF_SaveAsCopy{
+			Document: docRes.Document,
+			FilePath: &outputFile,
+		})
+		if err != nil {
+			t.Fatalf("save stamp document failed: %v", err)
+		}
+	})
+
+	t.Run("add text to stamp annot", func(t *testing.T) {
+		docRes, err := instance.OpenDocument(&requests.OpenDocument{
+			FilePath: &inputFile,
+		})
+		if err != nil {
+			t.Fatalf("open document failed: %v", err)
+		}
+
+		page := requests.Page{
+			ByIndex: &requests.PageByIndex{
+				Document: docRes.Document,
+				Index:    0,
+			},
+		}
+
+		_ = page 
+		// outputFile := "data/simple_text_stamp.pdf"
+		// os.Remove(outputFile)
+	})
+
+	t.Run("add img to stamp annot", func(t *testing.T) {
+		docRes, err := instance.OpenDocument(&requests.OpenDocument{
+			FilePath: &inputFile,
+		})
+		if err != nil {
+			t.Fatalf("open document failed: %v", err)
+		}
+
+		page := requests.Page{
+			ByIndex: &requests.PageByIndex{
+				Document: docRes.Document,
+				Index:    0,
+			},
+		}
+
+		var stampAnnot = NewStampAnnotation()
+		stampAnnot.SetRect(Rect{
+			Left:   100,
+			Bottom: 100,
+			Top:    146,
+			Right:  168,
+		})
+
+		outputFile := "data/simple_stamp_img.pdf"
+		os.Remove(outputFile)
+
+		// set image object
+		stampAnnot.SetImgObject("jpeg", docRes.Document, "simple.jpeg")
+
+		// add annotation to page
+		err = stampAnnot.AddAnnotationToPage(context.Background(), instance, page)
+		if err != nil {
+			t.Fatal(err)
+		}
+
+		_, err = instance.FPDF_SaveAsCopy(&requests.FPDF_SaveAsCopy{
+			Document: docRes.Document,
+			FilePath: &outputFile,
+		})
+		if err != nil {
+			t.Fatalf("save img stamp document failed: %v", err)
+		}
+	})
 }

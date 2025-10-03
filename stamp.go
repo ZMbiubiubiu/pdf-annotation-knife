@@ -18,6 +18,7 @@ const (
 	StampObjectImg  StampObjectType = 3
 )
 
+// PathObjectParam is the parameter for creating a path object.
 type PathObjectParam struct {
 	Points      [][]Point
 	Width       float32
@@ -39,10 +40,34 @@ func (s *StampAnnotation) SetPathObject(points [][]Point, width float32, strikeC
 	}
 }
 
+// ImageObjectParam is the parameter for creating an image object.
+type ImageObjectParam struct {
+	ImgType  string // png/jpg/jpeg
+	Document references.FPDF_DOCUMENT
+	FilePath string
+}
+
+func (s *StampAnnotation) SetImgObject(imgType string, document references.FPDF_DOCUMENT, filePath string) {
+	s.objectType = StampObjectImg
+	s.imgObject = &ImageObjectParam{
+		ImgType:  imgType,
+		Document: document,
+		FilePath: filePath,
+	}
+}
+
+// TextObjectParam is the parameter for creating a text object.
+type TextObjectParam struct {
+	Document references.FPDF_DOCUMENT
+	FontSize float32
+	Text     string
+}
+
 type StampAnnotation struct {
 	BaseAnnotation
 	objectType StampObjectType
 	pathObject *PathObjectParam
+	imgObject  *ImageObjectParam
 }
 
 func NewStampAnnotation() *StampAnnotation {
@@ -68,9 +93,9 @@ func (s *StampAnnotation) AddAnnotationToPage(ctx context.Context, instance pdfi
 	case StampObjectPath:
 		objRef, err = CreatePathObject(instance, page, s.pathObject)
 	case StampObjectText:
-		// objRef, err = CreateTextObject(instance, page, s.textObject)
+		// TODO objRef, err = CreateTextObject(instance, page, s.textObject)
 	case StampObjectImg:
-		// objRef, err = CreateImgObject(instance, page, s.imgObject)
+		objRef, err = CreateImgObject(instance, s.rect, s.imgObject)
 	default:
 		return errors.New("object type not supported")
 	}
