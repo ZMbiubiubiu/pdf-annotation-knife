@@ -110,10 +110,6 @@ func (b *BaseAnnotation) PreCheck() error {
 		IsZeroEpsilon(b.rect.Right) && IsZeroEpsilon(b.rect.Top) {
 		return errors.New("rect must be set")
 	}
-	// color
-	if b.strikeColor == nil && b.fillColor == nil {
-		return errors.New("strike color or fill color must be set at least one")
-	}
 	return nil
 }
 
