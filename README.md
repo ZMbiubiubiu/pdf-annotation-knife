@@ -1,5 +1,7 @@
 # pdf-annotation-knife
-Use go-pdfium to make it easier to handle PDF annotations. But we use an object-oriented approach to PDF annotations.
+Use go-pdfium to make it easier to handle PDF annotations.
+
+:rocket: *But we use an object-oriented approach to PDF annotations.* :rocket:
 
 # Add Attention
 
