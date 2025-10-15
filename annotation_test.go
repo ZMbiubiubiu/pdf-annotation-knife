@@ -254,7 +254,6 @@ func TestAddHighlightAnnotation(t *testing.T) {
 	})
 	highlightAnnot.SetOpacity(120)
 	highlightAnnot.SetStrikeColor(Color{R: 255, G: 0, B: 0})
-	// highlightAnnot.SetFillColor(Color{R: 0, G: 255, B: 0})
 	highlightAnnot.QuadPoints = []QuadPoint{
 		{
 			LeftTopX:     100,
@@ -468,7 +467,6 @@ func TestAddStampAnnotation(t *testing.T) {
 				{X: 70, Y: 102},
 			},
 		}, 2, Color{R: 255, G: 0, B: 255}, 120)
-		// stampAnnot.GenerateAppearance()
 		err = stampAnnot.AddAnnotationToPage(context.Background(), instance, page)
 		if err != nil {
 			t.Fatal(err)
