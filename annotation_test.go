@@ -27,6 +27,111 @@ func init() {
 	}
 }
 
+func TestAddLineAnnotation(t *testing.T) {
+	inputFile := "simple.pdf"
+
+	t.Run("simple normarl line", func(t *testing.T) {
+		// output file
+		outputFile := "data/simple_line.pdf"
+		os.Remove(outputFile)
+
+		docRes, err := instance.OpenDocument(&requests.OpenDocument{
+			FilePath: &inputFile,
+		})
+		if err != nil {
+			t.Fatalf("open document failed: %v", err)
+		}
+
+		page := requests.Page{
+			ByIndex: &requests.PageByIndex{
+				Document: docRes.Document,
+				Index:    0,
+			},
+		}
+
+		var lineAnnot = NewLineAnnotation()
+		lineAnnot.SetRect(Rect{
+			Left:   0,
+			Top:    700,
+			Right:  600,
+			Bottom: 0,
+		})
+		lineAnnot.Width = 8
+		lineAnnot.SetStrikeColor(Color{R: 0, G: 120, B: 0})
+		lineAnnot.SetOpacity(120)
+		lineAnnot.SetLineTo(100, 200, 200, 100)
+		lineAnnot.GenerateAppearance()
+
+		err = lineAnnot.AddAnnotationToPage(context.Background(), instance, page)
+		if err != nil {
+			t.Fatal(err)
+		}
+
+		_, err = instance.FPDF_SaveAsCopy(&requests.FPDF_SaveAsCopy{
+			Document: docRes.Document,
+			FilePath: &outputFile,
+		})
+		if err != nil {
+			t.Fatalf("save square document failed: %v", err)
+		}
+	})
+
+	t.Run("simple open arrow line", func(t *testing.T) {
+		// output file
+		outputFile := "data/simple_open_arrow_line.pdf"
+		os.Remove(outputFile)
+
+		docRes, err := instance.OpenDocument(&requests.OpenDocument{
+			FilePath: &inputFile,
+		})
+		if err != nil {
+			t.Fatalf("open document failed: %v", err)
+		}
+
+		page := requests.Page{
+			ByIndex: &requests.PageByIndex{
+				Document: docRes.Document,
+				Index:    0,
+			},
+		}
+
+		var lineAnnot = NewLineAnnotation()
+		lineAnnot.SetRect(Rect{
+			Left:   0,
+			Top:    700,
+			Right:  600,
+			Bottom: 0,
+		})
+		lineAnnot.Width = 2
+		lineAnnot.SetStrikeColor(Color{R: 255, G: 0, B: 0})
+		lineAnnot.SetOpacity(120)
+		lineAnnot.SetLineTo(150.799, 603.666, 472.192, 652.451)
+		lineAnnot.SetCustomAppearance(`1.0 0.0 0.0 RG
+/GS gs 
+18.000000 w
+2 J 
+150.799 603.666 m
+472.192 652.451 l
+441.962 609.090 m
+501.853 656.954 l
+430.457 684.889 l
+S`)
+		err = lineAnnot.AddAnnotationToPage(context.Background(), instance, page)
+		if err != nil {
+			t.Fatal(err)
+		}
+
+		_, err = instance.FPDF_SaveAsCopy(&requests.FPDF_SaveAsCopy{
+			Document: docRes.Document,
+			FilePath: &outputFile,
+		})
+		if err != nil {
+			t.Fatalf("save square document failed: %v", err)
+		}
+	})
+
+}
+
 func TestAddSquareAnnotation(t *testing.T) {
 	inputFile := "simple.pdf"
 	outputFile := "data/simple_square.pdf"
@@ -496,7 +601,7 @@ func TestAddStampAnnotation(t *testing.T) {
 			},
 		}
 
-		_ = page 
+		_ = page
 		// outputFile := "data/simple_text_stamp.pdf"
 		// os.Remove(outputFile)
 	})

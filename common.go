@@ -104,6 +104,10 @@ func (b *BaseAnnotation) SetStrikeColor(c Color) {
 	b.strikeColor = &c
 }
 
+func (b *BaseAnnotation) SetCustomAppearance(ap string) {
+	b.ap = ap
+}
+
 func (b *BaseAnnotation) PreCheck() error {
 	// rect
 	if IsZeroEpsilon(b.rect.Left) && IsZeroEpsilon(b.rect.Bottom) &&
@@ -203,7 +207,7 @@ func (b *BaseAnnotation) AddAnnotationToPage(ctx context.Context, instance pdfiu
 			log.Fatalf("set annot fill color failed: %v", err)
 			return err
 		}
-	}	
+	}
 
 	// set nm
 	if b.nm != "" {
@@ -215,9 +219,8 @@ func (b *BaseAnnotation) AddAnnotationToPage(ctx context.Context, instance pdfiu
 		if err != nil {
 			log.Fatalf("set annot nm failed: %v", err)
 			return err
-		}	
+		}
 	}
-
 
 	// set ap
 	if b.ap != "" {

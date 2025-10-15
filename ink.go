@@ -68,7 +68,6 @@ func (i *InkAnnotation) pointsCallback() string {
 }
 
 func (i *InkAnnotation) GetLineStyleAP() string {
-	// return fmt.Sprintf("%d j %d J", i.StrikeLineJoin, i.StrikeLineCap)
 	return fmt.Sprintf("%d j %d J", i.strikeLineCap, i.strikeLineJoin)
 }
 
