@@ -7,21 +7,71 @@ Use go-pdfium to make it easier to handle PDF annotations.
 
 We'll show you how to add annotations to a PDF document.
 
-## Text Annotations 
+## Line Annotations
 
-TODO 
+A line annotation displays a single straight line on the page.
+
+* Create a simple line annotation
+
+```go
+var lineAnnot = NewLineAnnotation()
+lineAnnot.SetRect(Rect{
+	Left:   0,
+	Top:    700,
+	Right:  600,
+	Bottom: 0,
+})
+lineAnnot.Width = 8
+lineAnnot.SetStrikeColor(Color{R: 0, G: 120, B: 0})
+lineAnnot.SetOpacity(120)
+lineAnnot.SetLineTo(100, 200, 200, 100)
+lineAnnot.GenerateAppearance()
+
+err = lineAnnot.AddAnnotationToPage(context.Background(), instance, page)
+```
+<img width="1044" height="616" alt="simple line" src="https://github.com/user-attachments/assets/aeadd3e9-8b8a-4346-b0ae-9c75190f90a5" />
+
+
+* Create a open arrow line annotation
+
+```go
+var lineAnnot = NewLineAnnotation()
+lineAnnot.SetRect(Rect{
+	Left:   0,
+	Top:    700,
+	Right:  600,
+	Bottom: 0,
+})
+lineAnnot.Width = 2
+lineAnnot.SetStrikeColor(Color{R: 255, G: 0, B: 0})
+lineAnnot.SetOpacity(120)
+lineAnnot.SetLineTo(150.799, 603.666, 472.192, 652.451)
+lineAnnot.SetCustomAppearance(`1.0 0.0 0.0 RG
+/GS gs 
+18.000000 w
+2 J 
+150.799 603.666 m
+472.192 652.451 l
+441.962 609.090 m
+501.853 656.954 l
+430.457 684.889 l
+S`)
+err = lineAnnot.AddAnnotationToPage(context.Background(), instance, page)
+```
+<img width="1438" height="786" alt="open arrow line" src="https://github.com/user-attachments/assets/49483b89-c488-45b7-add3-369da9caa346" />
+
 
 ## Freetext Annotations
 **A free text annotation (PDF 1.3) displays text directly on the page**. Unlike an ordinary text annotation, a free text annotation has no open or closed state; instead of being displayed in a pop-up window, the text is always visible.
 
 ```go
 var freeTextAnnot = NewFreeTextAnnotation()
-	freeTextAnnot.SetRect(Rect{
-		Left:   100,
-		Top:    200,
-		Right:  200,
-		Bottom: 100,
-	})
+freeTextAnnot.SetRect(Rect{
+	Left:   100,
+	Top:    200,
+	Right:  200,
+	Bottom: 100,
+})
 freeTextAnnot.Width = 2
 freeTextAnnot.SetStrikeColor(Color{R: 255, G: 0, B: 0})
 freeTextAnnot.SetOpacity(120)
@@ -39,12 +89,12 @@ Square annotations display a rectangle on the page.
 
 ```go
 var squareAnnot = NewSquareAnnotation()
-	squareAnnot.SetRect(Rect{
-		Left:   100,
-		Top:    200,
-		Right:  200,
-		Bottom: 100,
-	})
+squareAnnot.SetRect(Rect{
+	Left:   100,
+	Top:    200,
+	Right:  200,
+	Bottom: 100,
+})
 squareAnnot.Width = 10
 squareAnnot.SetStrikeColor(Color{R: 255, G: 0, B: 0})
 squareAnnot.SetFillColor(Color{R: 0, G: 255, B: 0})
@@ -62,12 +112,12 @@ Circle annotations display an ellipse on the page.
 
 ```go
 var circleAnnot = NewCircleAnnotation()
-	circleAnnot.SetRect(Rect{
-		Left:   100,
-		Top:    200,
-		Right:  200,
-		Bottom: 100,
-	})
+circleAnnot.SetRect(Rect{
+	Left:   100,
+	Top:    200,
+	Right:  200,
+	Bottom: 100,
+})
 circleAnnot.Width = 2
 circleAnnot.SetStrikeColor(Color{R: 255, G: 0, B: 0})
 circleAnnot.SetFillColor(Color{R: 0, G: 255, B: 0})
@@ -90,15 +140,14 @@ But you need to find the position of the text yourself by setting QuadPoints
 
 ```go
 var highlightAnnot = NewHighlightAnnotation()
-	highlightAnnot.SetRect(Rect{
-		Left:   0,
-		Top:    400,
-		Right:  200,
-		Bottom: 0,
-	})
+highlightAnnot.SetRect(Rect{
+	Left:   0,
+	Top:    400,
+	Right:  200,
+	Bottom: 0,
+})
 highlightAnnot.SetOpacity(120)
 highlightAnnot.SetStrikeColor(Color{R: 255, G: 0, B: 0})
-// highlightAnnot.SetFillColor(Color{R: 0, G: 255, B: 0})
 highlightAnnot.QuadPoints = []QuadPoint{
   {
     LeftTopX:     100,
@@ -134,12 +183,12 @@ But you need to find the position of the text yourself by setting QuadPoints
 
 ```go
 var underlineAnnot = NewUnderlineAnnotation()
-	underlineAnnot.SetRect(Rect{
-		Left:   0,
-		Top:    410,
-		Right:  210,
-		Bottom: 0,
-	})
+underlineAnnot.SetRect(Rect{
+	Left:   0,
+	Top:    410,
+	Right:  210,
+	Bottom: 0,
+})
 underlineAnnot.SetStrikeColor(Color{R: 0, G: 255, B: 0})
 underlineAnnot.SetOpacity(120)
 underlineAnnot.QuadPoints = []QuadPoint{
@@ -178,12 +227,12 @@ But you need to find the position of the text yourself by setting QuadPoints
 
 ```go
 var strikeoutAnnot = NewStrikeoutAnnotation()
-	strikeoutAnnot.SetRect(Rect{
-		Left:   100,
-		Top:    200,
-		Right:  200,
-		Bottom: 100,
-	})
+strikeoutAnnot.SetRect(Rect{
+	Left:   100,
+	Top:    200,
+	Right:  200,
+	Bottom: 100,
+})
 strikeoutAnnot.Width = 2
 strikeoutAnnot.SetStrikeColor(Color{R: 255, G: 0, B: 0})
 strikeoutAnnot.SetOpacity(120)
@@ -333,6 +382,9 @@ TODO
 
 TODO
 
+## Text Annotations 
+
+TODO 
 
 # Delete Annotations
 
