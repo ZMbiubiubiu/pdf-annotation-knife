@@ -18,7 +18,7 @@ var (
 type FreeTextAnnotation struct {
 	BaseAnnotation
 	Contents  string
-	FontColor *Color
+	FontColor Color
 	FontSize  int
 }
 
@@ -29,11 +29,21 @@ func NewFreeTextAnnotation() *FreeTextAnnotation {
 			nm:      GenerateUUID(),
 			opacity: DefaultOpacity,
 		},
+		FontSize:  DefaultFontSize,
+		FontColor: DefaultFontColor,
 	}
 }
 
+func (f *FreeTextAnnotation) SetFontColor(color Color) {
+	f.FontColor = color
+}
+
+func (f *FreeTextAnnotation) SetFontSize(size int) {
+	f.FontSize = size
+}
+
 func (f *FreeTextAnnotation) GenerateAppearance() error {
-	// todo generate freetext appearance
+	// TODO generate freetext appearance
 	f.ap = ""
 	return nil
 }
@@ -42,9 +52,6 @@ func (f *FreeTextAnnotation) AddAnnotationToPage(ctx context.Context, instance p
 	// set default font size and color
 	if f.FontSize == 0 {
 		f.FontSize = DefaultFontSize
-	}
-	if f.FontColor == nil {
-		f.FontColor = &DefaultFontColor
 	}
 
 	// create annotation

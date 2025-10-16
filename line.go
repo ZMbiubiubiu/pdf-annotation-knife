@@ -13,9 +13,8 @@ import (
 
 type LineAnnotation struct {
 	BaseAnnotation
-	lineTo         [2]Point
-	strikeLineCap  enums.FPDF_LINECAP
-	strikeLineJoin enums.FPDF_LINEJOIN
+	LineStyle
+	lineTo [2]Point
 }
 
 func NewLineAnnotation() *LineAnnotation {
@@ -25,8 +24,10 @@ func NewLineAnnotation() *LineAnnotation {
 			nm:      GenerateUUID(),
 			opacity: DefaultOpacity,
 		},
-		strikeLineCap:  enums.FPDF_LINECAP_BUTT,
-		strikeLineJoin: enums.FPDF_LINEJOIN_MITER,
+		LineStyle: LineStyle{
+			StrikeLineCap:  enums.FPDF_LINECAP_BUTT,
+			StrikeLineJoin: enums.FPDF_LINEJOIN_MITER,
+		},
 	}
 }
 
@@ -35,20 +36,6 @@ func (l *LineAnnotation) SetLineTo(beginX, beginY, endX, endY float32) {
 		{X: beginX, Y: beginY},
 		{X: endX, Y: endY},
 	}
-}
-
-// SetStrikeLineCap sets the line cap style for the stroke.
-func (l *LineAnnotation) SetStrikeLineCap(lineCap enums.FPDF_LINECAP) {
-	l.strikeLineCap = lineCap
-}
-
-// SetStrikeLineJoin sets the line join style for the stroke.
-func (l *LineAnnotation) SetStrikeLineJoin(lineJoin enums.FPDF_LINEJOIN) {
-	l.strikeLineJoin = lineJoin
-}
-
-func (l *LineAnnotation) GetLineStyleAP() string {
-	return fmt.Sprintf("%d j %d J", l.strikeLineCap, l.strikeLineJoin)
 }
 
 // GenerateAppearance generates the appearance stream for the line annotation.

@@ -27,7 +27,7 @@ func (b *BaseAnnotation) getColorAP(color *Color, isFill bool) string {
 }
 
 func (b *BaseAnnotation) GetWidthAP() string {
-	return fmt.Sprintf("%.3f w", float32(b.Width))
+	return fmt.Sprintf("%.3f w", float32(b.width))
 }
 
 func (b *BaseAnnotation) GetColorAP() string {

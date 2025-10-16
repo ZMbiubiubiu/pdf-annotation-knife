@@ -42,10 +42,10 @@ func (s *SquareAnnotation) GenerateAppearance() error {
 }
 
 func (s *SquareAnnotation) pointsCallback() string {
-	x := s.rect.Left + float32(s.Width)/2
-	y := s.rect.Bottom + float32(s.Width)/2
-	width := s.rect.Right - s.rect.Left - float32(s.Width)
-	height := s.rect.Top - s.rect.Bottom - float32(s.Width)
+	x := s.rect.Left + float32(s.width)/2
+	y := s.rect.Bottom + float32(s.width)/2
+	width := s.rect.Right - s.rect.Left - float32(s.width)
+	height := s.rect.Top - s.rect.Bottom - float32(s.width)
 	var ap = fmt.Sprintf("%.3f %.3f %.3f %.3f re\n", x, y, width, height)
 	if s.fillColor != nil {
 		ap += "B\n"

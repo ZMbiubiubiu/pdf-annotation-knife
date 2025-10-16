@@ -3,6 +3,7 @@ package annotation
 import (
 	"context"
 	"errors"
+	"fmt"
 	"log"
 
 	"github.com/klippa-app/go-pdfium"
@@ -16,10 +17,14 @@ const (
 	DefaultOpacity = 255 // default opacity is 100%
 )
 
+// Rect represents a rectangle with left, bottom, right, and top coordinates.
+// Defining the location and size of the annotation on the page.
+// *Every annotaion should have a rect to define the location and size on the page.*
 type Rect struct {
 	Left, Bottom, Right, Top float32
 }
 
+// Point represents a point with x, y coordinates.
 type Point struct {
 	X, Y float32
 }
@@ -35,6 +40,8 @@ func convertPointToPdfiumFormat(points []Point) []structs.FPDF_FS_POINTF {
 	return pdfiumPoints
 }
 
+// QuadPoint represents a quadrilateral point with left top, right top, right bottom, and left bottom coordinates.
+// Defining the area of the text-markup(highlight/underline/strikeout) annotation on the page.
 type QuadPoint struct {
 	LeftTopX, LeftTopY         float32
 	RightTopX, RightTopY       float32
@@ -71,13 +78,32 @@ type Color struct {
 	R, G, B uint8
 }
 
+type LineStyle struct {
+	StrikeLineCap  enums.FPDF_LINECAP
+	StrikeLineJoin enums.FPDF_LINEJOIN
+}
+
+// SetStrikeLineCap sets the line cap style for the stroke.
+func (l *LineStyle) SetStrikeLineCap(lineCap enums.FPDF_LINECAP) {
+	l.StrikeLineCap = lineCap
+}
+
+// SetStrikeLineJoin sets the line join style for the stroke.
+func (l *LineStyle) SetStrikeLineJoin(lineJoin enums.FPDF_LINEJOIN) {
+	l.StrikeLineJoin = lineJoin
+}
+
+func (l *LineStyle) GetLineStyleAP() string {
+	return fmt.Sprintf("%d j %d J", l.StrikeLineCap, l.StrikeLineJoin)
+}
+
 type BaseAnnotation struct {
 	nm          string // annotation unique name
 	title       string
 	annot       references.FPDF_ANNOTATION
 	subtype     enums.FPDF_ANNOTATION_SUBTYPE
 	rect        Rect
-	Width       float32
+	width       float32
 	opacity     uint8 // [0 -255]
 	strikeColor *Color
 	fillColor   *Color
@@ -92,6 +118,10 @@ func (b *BaseAnnotation) SetTitle(title string) {
 // SetRect sets the rect of the annotation.
 func (b *BaseAnnotation) SetRect(rect Rect) {
 	b.rect = rect
+}
+
+func (b *BaseAnnotation) SetWidth(width float32) {
+	b.width = width
 }
 
 // SetOpacity sets the opacity of the annotation.
@@ -164,12 +194,12 @@ func (b *BaseAnnotation) AddAnnotationToPage(ctx context.Context, instance pdfiu
 	}
 
 	// set border
-	if !IsZeroEpsilon(b.Width) {
+	if !IsZeroEpsilon(b.width) {
 		_, err = instance.FPDFAnnot_SetBorder(&requests.FPDFAnnot_SetBorder{
 			Annotation:       b.annot,
 			HorizontalRadius: 0,
 			VerticalRadius:   0,
-			BorderWidth:      float32(b.Width),
+			BorderWidth:      float32(b.width),
 		})
 		if err != nil {
 			log.Fatalf("set annot border failed: %v", err)
@@ -240,6 +270,7 @@ func (b *BaseAnnotation) AddAnnotationToPage(ctx context.Context, instance pdfiu
 	return nil
 }
 
+// GetSubtypeName returns the name of the annotation subtype.
 func (b *BaseAnnotation) GetSubtypeName() string {
 	switch b.subtype {
 	case enums.FPDF_ANNOT_SUBTYPE_CIRCLE:

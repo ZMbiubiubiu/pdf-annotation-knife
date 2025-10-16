@@ -51,10 +51,10 @@ func (c *CircleAnnotation) GenerateAppearance() error {
 
 func (c *CircleAnnotation) pointsCallback() string {
 	var ap string
-	x0 := c.rect.Left + float32(c.Width)/2
-	y0 := c.rect.Top - float32(c.Width)/2
-	x1 := c.rect.Right - float32(c.Width)/2
-	y1 := c.rect.Bottom + float32(c.Width)/2
+	x0 := c.rect.Left + float32(c.width)/2
+	y0 := c.rect.Top - float32(c.width)/2
+	x1 := c.rect.Right - float32(c.width)/2
+	y1 := c.rect.Bottom + float32(c.width)/2
 
 	xMid := x0 + (x1-x0)/2
 	yMid := y0 + (y1-y0)/2

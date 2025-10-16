@@ -27,7 +27,7 @@ func NewStrikeoutAnnotation() *StrikeoutAnnotation {
 }
 
 func (s *StrikeoutAnnotation) GenerateAppearance() error {
-	// todo generate strikeout appearance
+	// generate strikeout appearance
 	s.ap = strings.Join([]string{
 		"[] 0 d 1 w",
 		s.GetColorAP(),
