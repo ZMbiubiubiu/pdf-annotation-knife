@@ -405,7 +405,8 @@ inkAnnot.GenerateAppearance()
 err = inkAnnot.AddAnnotationToPage(context.Background(), instance, page)
 ```
 
-<img width="284" height="195" alt="image" src="https://github.com/user-attachments/assets/b303ad98-dd81-460e-87d8-c69fd2030cc5" />
+<img width="580" height="330" alt="image" src="https://github.com/user-attachments/assets/3956f0df-ffcd-46c7-86d8-e861d2e9bb66" />
+
 
 
 ## Stamp Annotations
