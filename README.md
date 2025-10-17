@@ -78,6 +78,7 @@ freeTextAnnot.FontColor = Color{R: 255, G: 0, B: 0}
 freeTextAnnot.GenerateAppearance()
 err = freeTextAnnot.AddAnnotationToPage(context.Background(), instance, page)
 ```
+<img width="954" height="508" alt="image" src="https://github.com/user-attachments/assets/f90dc67b-77b7-4906-9edb-f0133ec6dca1" />
 
 
 ## Square Annotations
@@ -144,7 +145,7 @@ highlightAnnot.SetRect(Rect{
 	Right:  932.784,
 	Bottom: 387.359,
 })
-highlightAnnot.SetOpacity(255)
+highlightAnnot.SetOpacity(120)
 highlightAnnot.SetStrikeColor(Color{R: 255, G: 255, B: 0})
 highlightAnnot.QuadPoints = []QuadPoint{
 	{
@@ -171,6 +172,7 @@ highlightAnnot.QuadPoints = []QuadPoint{
 highlightAnnot.GenerateAppearance()
 err = highlightAnnot.AddAnnotationToPage(context.Background(), instance, page)
 ```
+<img width="1158" height="348" alt="image" src="https://github.com/user-attachments/assets/e20bb455-6c61-42ef-9415-75e991bcdb98" />
 
 
 ### Underline Annotations
@@ -214,6 +216,7 @@ underlineAnnot.QuadPoints = []QuadPoint{
 underlineAnnot.GenerateAppearance()
 err = underlineAnnot.AddAnnotationToPage(context.Background(), instance, page)
 ```
+<img width="1568" height="460" alt="image" src="https://github.com/user-attachments/assets/f5ec208f-2684-457b-8743-91efbe95ad34" />
 
 
 ### Strikeout Annotations
@@ -258,6 +261,7 @@ strikeoutAnnot.QuadPoints = []QuadPoint{
 strikeoutAnnot.GenerateAppearance()
 err = strikeoutAnnot.AddAnnotationToPage(context.Background(), instance, page)
 ```
+<img width="1556" height="478" alt="image" src="https://github.com/user-attachments/assets/be8d108a-81f3-4898-9c78-7c9f443b3671" />
 
 ## Ink Annotations 
 
@@ -451,11 +455,10 @@ stampAnnot.SetPathObject([][]Point{
 		{X: 68, Y: 100},
 		{X: 70, Y: 102},
 	},
-}, 2, Color{R: 255, G: 0, B: 255}, 120)
+}, 2, Color{R: 0, G: 255, B: 0}, 120)
 err = stampAnnot.AddAnnotationToPage(context.Background(), instance, page)
 ```
-<img width="471" height="272" alt="image" src="https://github.com/user-attachments/assets/b41d7362-b285-482a-98e3-7ceae3ad3955" />
-
+<img width="788" height="412" alt="image" src="https://github.com/user-attachments/assets/a8ae1af8-1dd4-4c11-9672-04deaf8ac16a" />
 
 ### stamp with jpeg
 
