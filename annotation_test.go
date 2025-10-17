@@ -371,7 +371,7 @@ func TestAddFreeTextAnnotation(t *testing.T) {
 	freeTextAnnot.SetWidth(2)
 	freeTextAnnot.SetOpacity(120)
 	freeTextAnnot.Contents = "Hello, World!"
-	// freeTextAnnot.FontColor = &Color{R: 255, G: 0, B: 0}
+	freeTextAnnot.FontColor = Color{R: 255, G: 0, B: 0}
 	freeTextAnnot.GenerateAppearance()
 	err = freeTextAnnot.AddAnnotationToPage(context.Background(), instance, page)
 	if err != nil {
@@ -432,7 +432,7 @@ func TestAddCircleAnnotation(t *testing.T) {
 }
 
 func TestAddHighlightAnnotation(t *testing.T) {
-	inputFile := "simple.pdf"
+	inputFile := "simple_text.pdf"
 	outputFile := "data/simple_highlight.pdf"
 	os.Remove(outputFile)
 	docRes, err := instance.OpenDocument(&requests.OpenDocument{
@@ -451,33 +451,33 @@ func TestAddHighlightAnnotation(t *testing.T) {
 
 	var highlightAnnot = NewHighlightAnnotation()
 	highlightAnnot.SetRect(Rect{
-		Left:   0,
-		Top:    400,
-		Right:  200,
-		Bottom: 0,
+		Left:   239.084,
+		Top:    446.565,
+		Right:  932.784,
+		Bottom: 387.359,
 	})
-	highlightAnnot.SetOpacity(120)
-	highlightAnnot.SetStrikeColor(Color{R: 255, G: 0, B: 0})
+	highlightAnnot.SetOpacity(255)
+	highlightAnnot.SetStrikeColor(Color{R: 255, G: 255, B: 0})
 	highlightAnnot.QuadPoints = []QuadPoint{
 		{
-			LeftTopX:     100,
-			LeftTopY:     200,
-			RightTopX:    200,
-			RightTopY:    200,
-			RightBottomX: 200,
-			RightBottomY: 100,
-			LeftBottomX:  100,
-			LeftBottomY:  100,
+			LeftTopX:     239.85,
+			LeftTopY:     445.799,
+			RightTopX:    932.018,
+			RightTopY:    445.799,
+			LeftBottomX:  239.85,
+			LeftBottomY:  421.276,
+			RightBottomX: 932.018,
+			RightBottomY: 421.276,
 		},
 		{
-			LeftTopX:     100,
-			LeftTopY:     400,
-			RightTopX:    200,
-			RightTopY:    400,
-			RightBottomX: 200,
-			RightBottomY: 300,
-			LeftBottomX:  100,
-			LeftBottomY:  300,
+			LeftTopX:     239.85,
+			LeftTopY:     412.649,
+			RightTopX:    854.006,
+			RightTopY:    412.649,
+			LeftBottomX:  239.85,
+			LeftBottomY:  388.126,
+			RightBottomX: 854.006,
+			RightBottomY: 388.126,
 		},
 	}
 	highlightAnnot.GenerateAppearance()
@@ -496,7 +496,7 @@ func TestAddHighlightAnnotation(t *testing.T) {
 }
 
 func TestAddUnderlineAnnotation(t *testing.T) {
-	inputFile := "simple.pdf"
+	inputFile := "simple_text.pdf"
 	outputFile := "data/simple_underline.pdf"
 	os.Remove(outputFile)
 	docRes, err := instance.OpenDocument(&requests.OpenDocument{
@@ -515,33 +515,33 @@ func TestAddUnderlineAnnotation(t *testing.T) {
 
 	var underlineAnnot = NewUnderlineAnnotation()
 	underlineAnnot.SetRect(Rect{
-		Left:   0,
-		Top:    410,
-		Right:  210,
-		Bottom: 0,
+		Left:   239.084,
+		Top:    446.565,
+		Right:  932.784,
+		Bottom: 387.359,
 	})
 	underlineAnnot.SetStrikeColor(Color{R: 0, G: 255, B: 0})
 	underlineAnnot.SetOpacity(120)
 	underlineAnnot.QuadPoints = []QuadPoint{
 		{
-			LeftTopX:     100,
-			LeftTopY:     200,
-			RightTopX:    200,
-			RightTopY:    200,
-			RightBottomX: 200,
-			RightBottomY: 100,
-			LeftBottomX:  100,
-			LeftBottomY:  100,
+			LeftTopX:     239.85,
+			LeftTopY:     445.799,
+			RightTopX:    932.018,
+			RightTopY:    445.799,
+			LeftBottomX:  239.85,
+			LeftBottomY:  421.276,
+			RightBottomX: 932.018,
+			RightBottomY: 421.276,
 		},
 		{
-			LeftTopX:     100,
-			LeftTopY:     400,
-			RightTopX:    200,
-			RightTopY:    400,
-			RightBottomX: 200,
-			RightBottomY: 300,
-			LeftBottomX:  100,
-			LeftBottomY:  300,
+			LeftTopX:     239.85,
+			LeftTopY:     412.649,
+			RightTopX:    854.006,
+			RightTopY:    412.649,
+			LeftBottomX:  239.85,
+			LeftBottomY:  388.126,
+			RightBottomX: 854.006,
+			RightBottomY: 388.126,
 		},
 	}
 	underlineAnnot.GenerateAppearance()
@@ -560,7 +560,7 @@ func TestAddUnderlineAnnotation(t *testing.T) {
 }
 
 func TestAddStrikeoutAnnotation(t *testing.T) {
-	inputFile := "simple.pdf"
+	inputFile := "simple_text.pdf"
 	outputFile := "data/simple_strikeout.pdf"
 	os.Remove(outputFile)
 	docRes, err := instance.OpenDocument(&requests.OpenDocument{
@@ -579,24 +579,34 @@ func TestAddStrikeoutAnnotation(t *testing.T) {
 
 	var strikeoutAnnot = NewStrikeoutAnnotation()
 	strikeoutAnnot.SetRect(Rect{
-		Left:   100,
-		Top:    200,
-		Right:  200,
-		Bottom: 100,
+		Left:   239.084,
+		Top:    446.565,
+		Right:  932.784,
+		Bottom: 387.359,
 	})
-	strikeoutAnnot.SetWidth(2)
+	strikeoutAnnot.SetWidth(4)
 	strikeoutAnnot.SetStrikeColor(Color{R: 255, G: 0, B: 0})
-	strikeoutAnnot.SetOpacity(120)
+	strikeoutAnnot.SetOpacity(255)
 	strikeoutAnnot.QuadPoints = []QuadPoint{
 		{
-			LeftTopX:     100,
-			LeftTopY:     200,
-			RightTopX:    200,
-			RightTopY:    200,
-			RightBottomX: 200,
-			RightBottomY: 100,
-			LeftBottomX:  100,
-			LeftBottomY:  100,
+			LeftTopX:     239.85,
+			LeftTopY:     445.799,
+			RightTopX:    932.018,
+			RightTopY:    445.799,
+			LeftBottomX:  239.85,
+			LeftBottomY:  421.276,
+			RightBottomX: 932.018,
+			RightBottomY: 421.276,
+		},
+		{
+			LeftTopX:     239.85,
+			LeftTopY:     412.649,
+			RightTopX:    854.006,
+			RightTopY:    412.649,
+			LeftBottomX:  239.85,
+			LeftBottomY:  388.126,
+			RightBottomX: 854.006,
+			RightBottomY: 388.126,
 		},
 	}
 	strikeoutAnnot.GenerateAppearance()

@@ -21,12 +21,11 @@ lineAnnot.SetRect(Rect{
 	Right:  600,
 	Bottom: 0,
 })
-lineAnnot.Width = 8
+lineAnnot.SetWidth(8)
 lineAnnot.SetStrikeColor(Color{R: 0, G: 120, B: 0})
 lineAnnot.SetOpacity(120)
 lineAnnot.SetLineTo(100, 200, 200, 100)
 lineAnnot.GenerateAppearance()
-
 err = lineAnnot.AddAnnotationToPage(context.Background(), instance, page)
 ```
 <img width="1044" height="616" alt="simple line" src="https://github.com/user-attachments/assets/aeadd3e9-8b8a-4346-b0ae-9c75190f90a5" />
@@ -42,7 +41,7 @@ lineAnnot.SetRect(Rect{
 	Right:  600,
 	Bottom: 0,
 })
-lineAnnot.Width = 2
+lineAnnot.SetWidth(2)
 lineAnnot.SetStrikeColor(Color{R: 255, G: 0, B: 0})
 lineAnnot.SetOpacity(120)
 lineAnnot.SetLineTo(150.799, 603.666, 472.192, 652.451)
@@ -72,15 +71,14 @@ freeTextAnnot.SetRect(Rect{
 	Right:  200,
 	Bottom: 100,
 })
-freeTextAnnot.Width = 2
-freeTextAnnot.SetStrikeColor(Color{R: 255, G: 0, B: 0})
+freeTextAnnot.SetWidth(2)
 freeTextAnnot.SetOpacity(120)
 freeTextAnnot.Contents = "Hello, World!"
-freeTextAnnot.FontColor = &Color{R: 255, G: 0, B: 0}
+freeTextAnnot.FontColor = Color{R: 255, G: 0, B: 0}
 freeTextAnnot.GenerateAppearance()
 err = freeTextAnnot.AddAnnotationToPage(context.Background(), instance, page)
 ```
-<img width="485" height="256" alt="image" src="https://github.com/user-attachments/assets/0c3f00c8-34c4-4448-9ae0-dadd51e204f3" style="border: 5px solid #000000" />
+
 
 ## Square Annotations
 Square annotations display a rectangle on the page. 
@@ -95,7 +93,7 @@ squareAnnot.SetRect(Rect{
 	Right:  200,
 	Bottom: 100,
 })
-squareAnnot.Width = 10
+squareAnnot.SetWidth(10)
 squareAnnot.SetStrikeColor(Color{R: 255, G: 0, B: 0})
 squareAnnot.SetFillColor(Color{R: 0, G: 255, B: 0})
 squareAnnot.SetOpacity(120)
@@ -118,7 +116,7 @@ circleAnnot.SetRect(Rect{
 	Right:  200,
 	Bottom: 100,
 })
-circleAnnot.Width = 2
+circleAnnot.SetWidth(2)
 circleAnnot.SetStrikeColor(Color{R: 255, G: 0, B: 0})
 circleAnnot.SetFillColor(Color{R: 0, G: 255, B: 0})
 circleAnnot.SetOpacity(120)
@@ -141,39 +139,39 @@ But you need to find the position of the text yourself by setting QuadPoints
 ```go
 var highlightAnnot = NewHighlightAnnotation()
 highlightAnnot.SetRect(Rect{
-	Left:   0,
-	Top:    400,
-	Right:  200,
-	Bottom: 0,
+	Left:   239.084,
+	Top:    446.565,
+	Right:  932.784,
+	Bottom: 387.359,
 })
-highlightAnnot.SetOpacity(120)
-highlightAnnot.SetStrikeColor(Color{R: 255, G: 0, B: 0})
+highlightAnnot.SetOpacity(255)
+highlightAnnot.SetStrikeColor(Color{R: 255, G: 255, B: 0})
 highlightAnnot.QuadPoints = []QuadPoint{
-  {
-    LeftTopX:     100,
-    LeftTopY:     200,
-    RightTopX:    200,
-    RightTopY:    200,
-    RightBottomX: 200,
-    RightBottomY: 100,
-    LeftBottomX:  100,
-    LeftBottomY:  100,
-  },
-  {
-    LeftTopX:     100,
-    LeftTopY:     400,
-    RightTopX:    200,
-    RightTopY:    400,
-    RightBottomX: 200,
-    RightBottomY: 300,
-    LeftBottomX:  100,
-    LeftBottomY:  300,
-  },
+	{
+		LeftTopX:     239.85,
+		LeftTopY:     445.799,
+		RightTopX:    932.018,
+		RightTopY:    445.799,
+		LeftBottomX:  239.85,
+		LeftBottomY:  421.276,
+		RightBottomX: 932.018,
+		RightBottomY: 421.276,
+	},
+	{
+		LeftTopX:     239.85,
+		LeftTopY:     412.649,
+		RightTopX:    854.006,
+		RightTopY:    412.649,
+		LeftBottomX:  239.85,
+		LeftBottomY:  388.126,
+		RightBottomX: 854.006,
+		RightBottomY: 388.126,
+	},
 }
 highlightAnnot.GenerateAppearance()
 err = highlightAnnot.AddAnnotationToPage(context.Background(), instance, page)
 ```
-<img width="385" height="552" alt="image" src="https://github.com/user-attachments/assets/965b8b1c-567f-45eb-a424-25038b473df4" />
+
 
 ### Underline Annotations
 
@@ -184,39 +182,38 @@ But you need to find the position of the text yourself by setting QuadPoints
 ```go
 var underlineAnnot = NewUnderlineAnnotation()
 underlineAnnot.SetRect(Rect{
-	Left:   0,
-	Top:    410,
-	Right:  210,
-	Bottom: 0,
+	Left:   239.084,
+	Top:    446.565,
+	Right:  932.784,
+	Bottom: 387.359,
 })
 underlineAnnot.SetStrikeColor(Color{R: 0, G: 255, B: 0})
 underlineAnnot.SetOpacity(120)
 underlineAnnot.QuadPoints = []QuadPoint{
 	{
-		LeftTopX:     100,
-		LeftTopY:     200,
-		RightTopX:    200,
-		RightTopY:    200,
-		RightBottomX: 200,
-		RightBottomY: 100,
-		LeftBottomX:  100,
-		LeftBottomY:  100,
+		LeftTopX:     239.85,
+		LeftTopY:     445.799,
+		RightTopX:    932.018,
+		RightTopY:    445.799,
+		LeftBottomX:  239.85,
+		LeftBottomY:  421.276,
+		RightBottomX: 932.018,
+		RightBottomY: 421.276,
 	},
 	{
-		LeftTopX:     100,
-		LeftTopY:     400,
-		RightTopX:    200,
-		RightTopY:    400,
-		RightBottomX: 200,
-		RightBottomY: 300,
-		LeftBottomX:  100,
-		LeftBottomY:  300,
+		LeftTopX:     239.85,
+		LeftTopY:     412.649,
+		RightTopX:    854.006,
+		RightTopY:    412.649,
+		LeftBottomX:  239.85,
+		LeftBottomY:  388.126,
+		RightBottomX: 854.006,
+		RightBottomY: 388.126,
 	},
 }
 underlineAnnot.GenerateAppearance()
 err = underlineAnnot.AddAnnotationToPage(context.Background(), instance, page)
 ```
-<img width="417" height="492" alt="image" src="https://github.com/user-attachments/assets/a1378502-52af-4de5-8b28-d3b4814786b0" />
 
 
 ### Strikeout Annotations
@@ -228,30 +225,39 @@ But you need to find the position of the text yourself by setting QuadPoints
 ```go
 var strikeoutAnnot = NewStrikeoutAnnotation()
 strikeoutAnnot.SetRect(Rect{
-	Left:   100,
-	Top:    200,
-	Right:  200,
-	Bottom: 100,
+	Left:   239.084,
+	Top:    446.565,
+	Right:  932.784,
+	Bottom: 387.359,
 })
-strikeoutAnnot.Width = 2
+strikeoutAnnot.SetWidth(4)
 strikeoutAnnot.SetStrikeColor(Color{R: 255, G: 0, B: 0})
-strikeoutAnnot.SetOpacity(120)
+strikeoutAnnot.SetOpacity(255)
 strikeoutAnnot.QuadPoints = []QuadPoint{
 	{
-		LeftTopX:     100,
-		LeftTopY:     200,
-		RightTopX:    200,
-		RightTopY:    200,
-		RightBottomX: 200,
-		RightBottomY: 100,
-		LeftBottomX:  100,
-		LeftBottomY:  100,
+		LeftTopX:     239.85,
+		LeftTopY:     445.799,
+		RightTopX:    932.018,
+		RightTopY:    445.799,
+		LeftBottomX:  239.85,
+		LeftBottomY:  421.276,
+		RightBottomX: 932.018,
+		RightBottomY: 421.276,
+	},
+	{
+		LeftTopX:     239.85,
+		LeftTopY:     412.649,
+		RightTopX:    854.006,
+		RightTopY:    412.649,
+		LeftBottomX:  239.85,
+		LeftBottomY:  388.126,
+		RightBottomX: 854.006,
+		RightBottomY: 388.126,
 	},
 }
 strikeoutAnnot.GenerateAppearance()
 err = strikeoutAnnot.AddAnnotationToPage(context.Background(), instance, page)
 ```
-<img width="439" height="303" alt="image" src="https://github.com/user-attachments/assets/0a0f4696-5acd-4f10-b99d-8bdf564ab72d" />
 
 ## Ink Annotations 
 
@@ -263,35 +269,136 @@ An ink annotation represents a freehand “scribble” composed of one or more d
 var inkAnnot = NewInkAnnotation()
 inkAnnot.Points = [][]Point{
 	{
-		{
-			X: 100,
-			Y: 100,
-		},
-		{
-			X: 105,
-			Y: 105,
-		},
-		{
-			X: 110,
-			Y: 100,
-		},
-		{
-			X: 115,
-			Y: 95,
-		},
-		{
-			X: 120,
-			Y: 100,
-		},
+		{X: 52.691, Y: 777.755},
+		{X: 50.555, Y: 779.18},
+		{X: 49.843, Y: 779.18},
+		{X: 49.487, Y: 779.536},
+		{X: 49.131, Y: 779.536},
+		{X: 48.419, Y: 779.536},
+		{X: 48.063, Y: 779.892},
+		{X: 47.351, Y: 779.892},
+		{X: 46.639, Y: 779.892},
+		{X: 45.927, Y: 779.892},
+		{X: 44.859, Y: 779.892},
+		{X: 43.791, Y: 779.892},
+		{X: 42.723, Y: 779.892},
+		{X: 41.654, Y: 779.536},
+		{X: 40.586, Y: 779.536},
+		{X: 39.518, Y: 779.18},
+		{X: 38.45, Y: 778.824},
+		{X: 37.382, Y: 778.824},
+		{X: 36.314, Y: 778.468},
+		{X: 35.246, Y: 778.111},
+		{X: 34.178, Y: 777.755},
+		{X: 33.466, Y: 777.399},
+		{X: 32.398, Y: 776.687},
+		{X: 31.33, Y: 776.331},
+		{X: 30.618, Y: 775.975},
+		{X: 29.55, Y: 775.263},
+		{X: 28.838, Y: 774.906},
+		{X: 28.482, Y: 774.194},
+		{X: 27.77, Y: 773.482},
+		{X: 27.058, Y: 772.414},
+		{X: 26.702, Y: 771.701},
+		{X: 26.346, Y: 770.989},
+		{X: 25.99, Y: 770.277},
+		{X: 25.634, Y: 769.209},
+		{X: 25.634, Y: 768.496},
+		{X: 25.634, Y: 767.428},
+		{X: 25.277, Y: 766.716},
+		{X: 25.634, Y: 766.004},
+		{X: 25.634, Y: 764.935},
+		{X: 25.99, Y: 764.223},
+		{X: 26.346, Y: 763.511},
+		{X: 26.702, Y: 762.442},
+		{X: 27.414, Y: 761.374},
+		{X: 28.126, Y: 760.662},
+		{X: 28.838, Y: 759.594},
+		{X: 29.55, Y: 758.881},
+		{X: 30.618, Y: 758.169},
+		{X: 32.042, Y: 757.101},
+		{X: 33.11, Y: 756.388},
+		{X: 34.534, Y: 755.676},
+		{X: 35.958, Y: 754.964},
+		{X: 37.738, Y: 754.608},
+		{X: 39.518, Y: 754.252},
+		{X: 41.298, Y: 753.54},
+		{X: 43.079, Y: 753.183},
+		{X: 45.215, Y: 753.183},
+		{X: 48.775, Y: 752.471},
+		{X: 50.911, Y: 752.471},
+		{X: 53.047, Y: 752.471},
+		{X: 54.827, Y: 752.471},
+		{X: 56.963, Y: 752.471},
+		{X: 59.099, Y: 752.827},
+		{X: 61.236, Y: 752.827},
+		{X: 63.372, Y: 753.183},
+		{X: 65.508, Y: 753.54},
+		{X: 67.644, Y: 754.252},
+		{X: 69.78, Y: 754.608},
+		{X: 71.56, Y: 755.32},
+		{X: 73.34, Y: 756.032},
+		{X: 74.764, Y: 756.388},
+		{X: 76.188, Y: 757.101},
+		{X: 77.613, Y: 757.813},
+		{X: 78.681, Y: 758.169},
+		{X: 80.105, Y: 758.881},
+		{X: 81.173, Y: 759.594},
+		{X: 81.885, Y: 760.306},
+		{X: 82.597, Y: 761.018},
+		{X: 83.309, Y: 761.73},
+		{X: 84.021, Y: 762.086},
+		{X: 84.733, Y: 762.799},
+		{X: 85.089, Y: 763.511},
+		{X: 85.801, Y: 764.579},
+		{X: 86.157, Y: 765.291},
+		{X: 86.157, Y: 766.36},
+		{X: 86.513, Y: 767.072},
+		{X: 86.869, Y: 767.784},
+		{X: 86.869, Y: 768.853},
+		{X: 86.869, Y: 769.921},
+		{X: 86.513, Y: 770.633},
+		{X: 86.513, Y: 771.701},
+		{X: 85.801, Y: 772.414},
+		{X: 85.445, Y: 773.126},
+		{X: 84.733, Y: 773.482},
+		{X: 84.021, Y: 774.194},
+		{X: 82.953, Y: 774.55},
+		{X: 81.529, Y: 775.263},
+		{X: 80.461, Y: 775.619},
+		{X: 79.037, Y: 775.619},
+		{X: 77.613, Y: 775.975},
+		{X: 75.832, Y: 775.975},
+		{X: 74.408, Y: 776.331},
+		{X: 72.984, Y: 776.331},
+		{X: 71.204, Y: 776.331},
+		{X: 69.424, Y: 776.331},
+		{X: 67.644, Y: 776.331},
+		{X: 65.508, Y: 775.975},
+		{X: 63.728, Y: 775.619},
+		{X: 62.304, Y: 775.619},
+		{X: 60.524, Y: 775.263},
+		{X: 58.743, Y: 774.906},
+		{X: 57.319, Y: 774.55},
+		{X: 55.895, Y: 774.194},
+		{X: 54.827, Y: 773.838},
+		{X: 53.759, Y: 773.838},
+		{X: 52.335, Y: 773.482},
+		{X: 51.623, Y: 773.126},
+		{X: 50.911, Y: 772.77},
+		{X: 50.199, Y: 772.414},
+		{X: 49.487, Y: 772.414},
+		{X: 48.775, Y: 771.701},
+		{X: 47.707, Y: 771.345},
 	},
 }
 inkAnnot.SetRect(Rect{
 	Left:   0,
-	Bottom: 0,
-	Top:    200,
-	Right:  200,
+	Bottom: 700,
+	Top:    800,
+	Right:  100,
 })
-inkAnnot.Width = 4
+inkAnnot.SetWidth(4)
 inkAnnot.SetStrikeColor(Color{R: 255, G: 0, B: 255})
 inkAnnot.SetOpacity(120)
 inkAnnot.GenerateAppearance()

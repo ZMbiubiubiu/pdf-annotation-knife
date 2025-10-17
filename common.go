@@ -45,8 +45,8 @@ func convertPointToPdfiumFormat(points []Point) []structs.FPDF_FS_POINTF {
 type QuadPoint struct {
 	LeftTopX, LeftTopY         float32
 	RightTopX, RightTopY       float32
-	RightBottomX, RightBottomY float32
 	LeftBottomX, LeftBottomY   float32
+	RightBottomX, RightBottomY float32
 }
 
 func convertQuadPointToPdfiumFormat(quadPoints []QuadPoint) []structs.FPDF_FS_QUADPOINTSF {
